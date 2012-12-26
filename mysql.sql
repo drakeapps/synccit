@@ -1,5 +1,9 @@
+
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
 --
--- Database: `redditsync`
+-- Database: `rddtsync`
 --
 
 -- --------------------------------------------------------
@@ -52,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `logincodes` (
   `lastlogin` int(10) unsigned NOT NULL,
   `created` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -66,12 +70,13 @@ CREATE TABLE IF NOT EXISTS `user` (
   `passhash` text NOT NULL,
   `salt` text NOT NULL,
   `email` text,
-  `lastlogin` int(10) unsigned DEFAULT NULL,
-  `lastactivity` int(10) unsigned DEFAULT NULL,
+  `lastlogin` int(10) unsigned DEFAULT '0',
+  `lastactivity` int(10) unsigned DEFAULT '0',
   `lastip` varchar(15) DEFAULT NULL,
-  `numlink` int(8) unsigned DEFAULT NULL,
-  `numcomments` int(8) unsigned DEFAULT NULL,
-  `loginattempts` int(2) unsigned DEFAULT NULL,
+  `numlink` int(8) unsigned DEFAULT '0',
+  `numcomments` int(8) unsigned DEFAULT '0',
+  `loginattempts` int(2) unsigned DEFAULT '0',
+  `created` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
