@@ -1,0 +1,6 @@
+
+<IfModule mod_rewrite.c>  
+RewriteEngine on  
+RewriteRule ^/login$ /login.php
+RewriteRule ^create$ /create.php 
+</IfModule>

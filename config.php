@@ -5,9 +5,20 @@
 // SETUP
 // Database info
 $dbhost = "localhost";
-$dbuser = "redditsync";
-$dbpass = "GYn5UZGGqGWU9PzA";
-$dbname = "redditsync";
+$dbuser = "root";
+$dbpass = "";
+$dbname = "rddtsync";
+
+
+
+// Base URL
+// if on root, make it blank
+// otherwise /foldername with no trailing slash
+$baseurl = "/rsync";
+
+
+// API location
+$apiloc = "http://localhost/rsync/api/";
 
 
 $mysql = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
