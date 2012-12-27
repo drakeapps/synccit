@@ -9,6 +9,8 @@ if($session->isLoggedIn()) {
     exit;
 }
 
+//TODO add hash to login form to prevent csrf
+
 
 if(isset($_POST['login'])) {	
 

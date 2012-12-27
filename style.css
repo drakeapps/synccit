@@ -99,3 +99,20 @@ input.text {
 .attr {
 	float:right;
 }
+
+#codelist {
+    width: 50%;
+    padding-left: 25%;
+}
+
+.leftside {
+    text-align: left;
+    float:left;
+}
+
+.rightside {
+    text-align: right;
+    float:right;
+    font-family: monospace;
+    font-size: 120%;
+}

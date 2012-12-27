@@ -7,6 +7,7 @@ class Session {
     public $user;
     public $hash;
     public $id;
+    public $hasLoggedIn = false;
 
 
 
@@ -64,6 +65,7 @@ class Session {
             if(strcmp($info["id"], $this->id) == 0) {
                 $this->setHash($info["authhash"]);
                 $this->setUser($info["userid"]);
+                $this->hasLoggedIn = true;
                 return true;
             } else {
                 return false;

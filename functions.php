@@ -25,11 +25,21 @@ function getLinks($userid, $count, $start, $order ) {
 }
 
 
+function genrand() {
+    $rand = "";
+    for($i=0; $i<6; $i++) {
+        // this was posted on stack overflow
+        $rand .= rand(0,1) ? rand(0,9) : chr(rand(ord('a'), ord('z')));
+    }
+    return $rand;
+}
+
 
 // themeing
 function htmlHeader($title, $loggedin=false) {
 	global $baseurl;
 	?>
+<!DOCTYPE HTML>
 <html>
 <head>
 <title><?php echo $title; ?></title>
@@ -49,13 +59,15 @@ function htmlHeader($title, $loggedin=false) {
 		<?php
 		if($loggedin) {
 			?>
-			<li><a class="navlink" href="profile.php">Profile</a></li>
+			<li><a class="navlink" href="profile.php">profile</a></li>
+            <li><a class="navlink" href="addkey.php">add device</a></li>
+            <li><a class="navlink" href="logout.php?l=sessionkey">logout</a></li>
 			
 			<?php
 		} else {
 			?>
-			<li><a class="navlink" href="login.php">Login</a></li>
-			<li><a class="navlink" href="create.php">Create Account</a></li>
+			<li><a class="navlink" href="login.php">login</a></li>
+			<li><a class="navlink" href="create.php">create account</a></li>
 			<?php
 		}?>
 		</ul>
