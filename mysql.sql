@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS `authcodes` (
   `username` varchar(30) NOT NULL,
   `authhash` text NOT NULL,
   `description` text NOT NULL,
-  `lastused` int(10) unsigned DEFAULT NULL,
-  `created` int(10) unsigned DEFAULT NULL,
+  `lastused` int(10) unsigned DEFAULT '0',
+  `created` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `userid` (`userid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -39,9 +39,10 @@ CREATE TABLE IF NOT EXISTS `links` (
   `lastcommentcount` int(6) unsigned NOT NULL,
   `firstvisit` int(10) unsigned NOT NULL,
   `lastcall` text NOT NULL,
+  `developers` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `linkid` (`linkid`,`userid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  UNIQUE KEY `linkid` (`linkid`,`userid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
