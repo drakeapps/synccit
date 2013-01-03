@@ -58,7 +58,7 @@ if(isset($_POST['data'])) {
 
         //var_dump($updates);
 
-        $developer = (isset($_POST['dev'])) ? $_POST['developer'] : "unknown";
+        $developer = (isset($_POST['dev'])) ? $_POST['dev'] : "unknown";
 
         insertLinks($updates, $developer, $authinfo["userid"], $authinfo["device"]);
 
