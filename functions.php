@@ -83,7 +83,7 @@ function htmlFooter() {
 </div>
 <div id="footer">
 
-<span class="attr"><a href="http://drakeapps.com/">Drake Apps, LLC</a> | <a href="http://github.com/drakeapps">Open Source</a></span>
+<span class="attr"><a href="http://drakeapps.com/">Drake Apps</a> | <a target="_blank" href="https://github.com/drakeapps/synccit">Open Source</a></span>
 </div>
 </body>
 </html><?php
