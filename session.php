@@ -52,6 +52,12 @@ class Session {
         }
     }
 
+    public function destroyPHPSession() {
+        $_SESSION['id'] = null;
+        $_SESSION['hash'] = null;
+        return true;
+    }
+
     public function isLoggedIn() {
 
         $this->restorePHPSession();

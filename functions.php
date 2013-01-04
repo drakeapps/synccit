@@ -38,6 +38,10 @@ function genrand() {
 // themeing
 function htmlHeader($title, $loggedin=false) {
 	global $baseurl;
+    if($loggedin) {
+        global $session;
+        $key = $session->hash;
+    }
 	?>
 <!DOCTYPE HTML>
 <html>
@@ -59,9 +63,10 @@ function htmlHeader($title, $loggedin=false) {
 		<?php
 		if($loggedin) {
 			?>
-			<li><a class="navlink" href="profile.php">profile</a></li>
-            <li><a class="navlink" href="addkey.php">add device</a></li>
-            <li><a class="navlink" href="logout.php?l=sessionkey">logout</a></li>
+			<!--<li><a class="navlink" href="profile.php">profile</a></li>-->
+            <li><a class="navlink" href="plugin.php">browser plugin</a></li>
+            <li><a class="navlink" href="addkey.php">devices</a></li>
+            <li><a class="navlink" href="logout.php?l=<?php echo $key; ?>">logout</a></li>
 			
 			<?php
 		} else {

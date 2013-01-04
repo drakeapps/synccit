@@ -79,10 +79,11 @@ htmlHeader($title, $loggedin);
     <span class="error"><?php echo $error; ?></span>
 <form action="addkey.php" method="post">
     <input type="hidden" name="hash" value="<?php echo $hash; ?>" />
-    <label for="device">device name</label><br />
-    <input type="text" id="device" name="device" value="" class="text" />
+    <label for="device">add new device</label><br />
+    <input type="text" id="device" name="device" value="device name" class="text" onblur="if (this.value == '') {this.value = 'device name';}"
+           onfocus="if (this.value == 'device name') {this.value = '';}" />
     <br />
-    <input type="submit" name="submit" value="submit" />
+    <input type="submit" name="submit" value="add device" />
 </form>
     <br />
     <div id="codelist">
@@ -96,6 +97,10 @@ htmlHeader($title, $loggedin);
             echo "<br />";
         }
     ?>
+    </div>
+    <div id="apiloc">
+        <br />API Location<br />
+        <span class="apiurl"><?php echo $apiloc; ?></span>
     </div>
 </div>
 <?php

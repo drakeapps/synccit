@@ -116,3 +116,54 @@ input.text {
     font-family: monospace;
     font-size: 120%;
 }
+
+.apiurl {
+    font-size: 120%;
+    font-family: monospace;
+}
+
+#index {
+    width:50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.loggedin {
+    float: right;
+}
+
+.biglink {
+    font-size: 125%;
+    font-weight: bold;
+    color: #d7d7d7;
+    text-decoration: none;
+    background: #595959;
+    padding: 5px 11px 5px 10px;
+}
+
+.greylink {
+    font-weight: bold;
+    color: #d7d7d7;
+    text-decoration: none;
+    background: #595959;
+    padding: 5px 11px 5px 10px;
+}
+
+
+
+.col1 {
+    width: 33%;
+}
+
+.col2 {
+    width: 33%;
+
+}
+.col3 {
+    width: 33%;
+}
+
+.center {
+    text-align: center;
+}
+
