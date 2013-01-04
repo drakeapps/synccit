@@ -22,9 +22,9 @@ class User {
         if($u == 0) {
             return false;
         }
-
-        $sql = "SELECT * FROM `user` WHERE `id` = '".mysql_real_escape_string($u)."' LIMIT 1";
         global $mysql;
+        $sql = "SELECT * FROM `user` WHERE `id` = '".$mysql->real_escape_string($u)."' LIMIT 1";
+
         $res = $mysql->query($sql);
         if($res->num_rows < 1) {
             return false;

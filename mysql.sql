@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `links` (
   `lastcall` text NOT NULL,
   `developers` text NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `linkid` (`linkid`,`userid`)
+  UNIQUE KEY `linkid` (`linkid`,`userid`),
+  KEY `links` (`linkid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

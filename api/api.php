@@ -94,19 +94,20 @@ if(isset($_POST['data'])) {
 
 
 function checkAuth($username, $auth) {
+    global $mysql;
     // seems running this and seeing if affected_rows was > 0 doesn't work.
     // this does help me get the user id I use later
     // but just using username probably wouldn't be a bad idea
     /*$sql = "UPDATE `authcodes`
         SET `lastused` = '".time()."'
         WHERE
-            `username` = '".mysql_real_escape_string($username)."' AND
-            `authhash` = '".mysql_real_escape_string($auth)."' LIMIT 1";*/
+            `username` = '".$mysql->real_escape_string($username)."' AND
+            `authhash` = '".$mysql->real_escape_string($auth)."' LIMIT 1";*/
     $sql = "SELECT * FROM `authcodes`
         WHERE
-            `username` = '".mysql_real_escape_string($username)."' AND
-            `authhash` = '".mysql_real_escape_string($auth)."' LIMIT 1";
-    global $mysql;
+            `username` = '".$mysql->real_escape_string($username)."' AND
+            `authhash` = '".$mysql->real_escape_string($auth)."' LIMIT 1";
+    
 
     if($res = $mysql->query($sql)) {
         //var_dump($result);
@@ -135,74 +136,77 @@ function insertLinks($updates, $developer, $user, $devicename) {
     // just realized foreach can do keys. should change it
     while($current = current($updates)) {
         $linkid = key($updates);
-        //$commentcount = $current['comment'] != NULL ? $current['commment'] : "-1";
-        if($current['comment'] != NULL) {
-            $commentcount = $current['comment'];
-            $commenttime = time();
-        } else {
-            $commentcount = "-1";
-            $commenttime = 0;
-        }
-        $linktime = $current['link'] == 1 ? time() : 0;
+        if(strlen($linkid) == 6) { // seems a blank link can get added and causes some trouble
 
+            //$commentcount = $current['comment'] != NULL ? $current['commment'] : "-1";
+            if($current['comment'] != NULL) {
+                $commentcount = $current['comment'];
+                $commenttime = time();
+            } else {
+                $commentcount = "-1";
+                $commenttime = 0;
+            }
+            $linktime = $current['link'] == 1 ? time() : 0;
 
-        $sql = "
-            INSERT INTO `links`
-            (
-              `id`,
-              `linkid`,
-              `userid`,
-              `lastvisit`,
-              `lastcommenttime`,
-              `lastcommentcount`,
-              `firstvisit`,
-              `lastcall`,
-              `developers`
-            ) VALUES (
-              NULL,
-              '".mysql_real_escape_string($linkid)."',
-              '".mysql_real_escape_string($user)."',
-              '".mysql_real_escape_string($linktime)."',
-              '".mysql_real_escape_string($commenttime)."',
-              '".mysql_real_escape_string($commentcount)."',
-              '".mysql_real_escape_string($linktime)."',
-              '".mysql_real_escape_string($devicename)."',
-              '".mysql_real_escape_string($developer)."'
-            )";
-        $res = $mysql->query($sql);
-        if(!$res) {
 
             $sql = "
-            UPDATE `links`
-                SET
-            ";
-            if($commentcount != "-1") {
-                $sql .= "
-                `lastcommentcount`  = '".mysql_real_escape_string($commentcount)."',
-                `lastcommenttime`   = '".mysql_real_escape_string($commenttime)."',
-                ";
-            }
-            if($linktime != 0) {
-                $sql .= "
-                `lastvisit` = '".mysql_real_escape_string($linktime)."',
-                `firstvisit` = IF (`firstvisit` = 0, '".mysql_real_escape_string($linktime)."', `firstvisit`),
-                ";
-            }
-            $sql .= "
-                `lastcall` = '".mysql_real_escape_string($devicename)."',
-                `developers` = IFNULL(CONCAT(`developers`, ', ".mysql_real_escape_string($developer)."'), '".mysql_real_escape_string($developer)."')
-
-                WHERE
-                    `linkid` = '".mysql_real_escape_string($linkid)."'
-                AND
-                    `userid` = '".mysql_real_escape_string($user)."'
-
-                LIMIT 1
-            ";
+                INSERT INTO `links`
+                (
+                  `id`,
+                  `linkid`,
+                  `userid`,
+                  `lastvisit`,
+                  `lastcommenttime`,
+                  `lastcommentcount`,
+                  `firstvisit`,
+                  `lastcall`,
+                  `developers`
+                ) VALUES (
+                  NULL,
+                  '".$mysql->real_escape_string($linkid)."',
+                  '".$mysql->real_escape_string($user)."',
+                  '".$mysql->real_escape_string($linktime)."',
+                  '".$mysql->real_escape_string($commenttime)."',
+                  '".$mysql->real_escape_string($commentcount)."',
+                  '".$mysql->real_escape_string($linktime)."',
+                  '".$mysql->real_escape_string($devicename)."',
+                  '".$mysql->real_escape_string($developer)."'
+                )";
             $res = $mysql->query($sql);
+            if(!$res) {
+
+                $sql = "
+                UPDATE `links`
+                    SET
+                ";
+                if($commentcount != "-1") {
+                    $sql .= "
+                    `lastcommentcount`  = '".$mysql->real_escape_string($commentcount)."',
+                    `lastcommenttime`   = '".$mysql->real_escape_string($commenttime)."',
+                    ";
+                }
+                if($linktime != 0) {
+                    $sql .= "
+                    `lastvisit` = '".$mysql->real_escape_string($linktime)."',
+                    `firstvisit` = IF (`firstvisit` = 0, '".$mysql->real_escape_string($linktime)."', `firstvisit`),
+                    ";
+                }
+                $sql .= "
+                    `lastcall` = '".$mysql->real_escape_string($devicename)."',
+                    `developers` = IFNULL(CONCAT(`developers`, ', ".$mysql->real_escape_string($developer)."'), '".$mysql->real_escape_string($developer)."')
+
+                    WHERE
+                        `linkid` = '".$mysql->real_escape_string($linkid)."'
+                    AND
+                        `userid` = '".$mysql->real_escape_string($user)."'
+
+                    LIMIT 1
+                ";
+                $res = $mysql->query($sql);
+                //var_dump($res);
+            }
             //var_dump($res);
         }
-        //var_dump($res);
         next($updates);
     }
 }
@@ -212,7 +216,7 @@ function insertLinks($updates, $developer, $user, $devicename) {
 // text, xml, json
 // default (null) is text
 function readLinks($links, $user, $type=null) {
-
+    global $mysql;
     if(count($links) < 1) {
         xerror("no links requested");
         return false;
@@ -223,18 +227,18 @@ function readLinks($links, $user, $type=null) {
         WHERE ( ";
 
     foreach($links as $link) {
-        $sql .= " `linkid` = '".mysql_real_escape_string($link)."' OR ";
+        $sql .= " `linkid` = '".$mysql->real_escape_string($link)."' OR ";
     }
 
     // 1=0 to get rid of extra OR
     $sql .= "
         1=0) AND
-        `userid` = '".mysql_real_escape_string($user)."'
+        `userid` = '".$mysql->real_escape_string($user)."'
     ";
 
     //echo $sql;
 
-    global $mysql;
+
     $result = $mysql->query($sql);
 
     if($result->num_rows < 1) {

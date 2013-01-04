@@ -55,10 +55,10 @@ class Session {
     public function isLoggedIn() {
 
         $this->restorePHPSession();
-
-        $sql = "SELECT * FROM `logincodes` WHERE `id` = '".mysql_real_escape_string($this->id)."' LIMIT 1";
-
         global $mysql;
+        $sql = "SELECT * FROM `logincodes` WHERE `id` = '".$mysql->real_escape_string($this->id)."' LIMIT 1";
+
+
         $result = $mysql->query($sql);
         if($result->num_rows > 0) {
             $info = $result->fetch_assoc();

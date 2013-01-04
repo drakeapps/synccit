@@ -21,7 +21,7 @@ if(isset($_POST['login'])) {
 	// check username validity
 	$password = $_POST['password'];
 
-	$userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".mysql_real_escape_string($username)."' LIMIT 1");
+	$userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
 
     if($userinfo->num_rows > 0) {
 
@@ -54,8 +54,8 @@ if(isset($_POST['login'])) {
                 `created`
             ) VALUES (
                 NULL,
-                '".mysql_real_escape_string($userid)."',
-                '".mysql_real_escape_string($session->hash)."',
+                '".$mysql->real_escape_string($userid)."',
+                '".$mysql->real_escape_string($session->hash)."',
                 '".time()."',
                 '".time()."'
             )";

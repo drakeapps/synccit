@@ -27,6 +27,13 @@ if(isset($_POST['create'])) {
     if(strcmp($password, $_POST['passwordconfirm'])) {
         $error = "passwords do not match";
     }
+    
+    /*$hashset = create_hash($password);
+        $pieces = explode(":", $hashset);
+        $salt = $pieces[2];
+        $hash = $pieces[3];*/
+    
+    //$error = $mysql->real_escape_string($username)." ".$email." ".$password." ".$salt." ".$hash;
 
     // no errors. make acct
     if($error == "") {
@@ -46,12 +53,12 @@ if(isset($_POST['create'])) {
             `lastip`
         ) VALUES (
             NULL,
-            '".mysql_real_escape_string($username)."',
-            '".mysql_real_escape_string($hash)."',
-            '".mysql_real_escape_string($salt)."',
-            '".mysql_real_escape_string($email)."',
+            '".$mysql->real_escape_string($username)."',
+            '".$mysql->real_escape_string($hash)."',
+            '".$mysql->real_escape_string($salt)."',
+            '".$mysql->real_escape_string($email)."',
             '".time()."',
-            '".mysql_real_escape_string($_SERVER['REMOTE_ADDR'])."'
+            '".$mysql->real_escape_string($_SERVER['REMOTE_ADDR'])."'
         )";
 
         if($mysql->query($sql)) {

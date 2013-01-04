@@ -38,10 +38,10 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
             `created`
         ) VALUES (
             NULL,
-            '".mysql_real_escape_string($user->id)."',
-            '".mysql_real_escape_string($user->username)."',
+            '".$mysql->real_escape_string($user->id)."',
+            '".$mysql->real_escape_string($user->username)."',
             '".$key."',
-            '".mysql_real_escape_string($_POST['device'])."',
+            '".$mysql->real_escape_string($_POST['device'])."',
             '".time()."'
         )";
         if($res = $mysql->query($sql)) {
@@ -57,7 +57,7 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
 
 }
 
-$sql = "SELECT * FROM `authcodes` WHERE `userid` = '".mysql_real_escape_string($user->id)."' ORDER BY `created` DESC";
+$sql = "SELECT * FROM `authcodes` WHERE `userid` = '".$mysql->real_escape_string($user->id)."' ORDER BY `created` DESC";
 $res = $mysql->query($sql);
 // this could be a separate class, but I'm pretty sure this is the only time it'll be used
 $user = array();

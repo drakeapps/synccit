@@ -15,8 +15,9 @@ class Link {
 
     public function loadLink($i) {
 
-        $sql = "SELECT * FROM `links` WHERE `linkid` = '".mysql_real_escape_string($i)."' LIMIT 1";
         global $mysql;
+        $sql = "SELECT * FROM `links` WHERE `linkid` = '".$mysql->real_escape_string($i)."' LIMIT 1";
+
         if(!($res = $mysql->query($sql))) {
             return false;
         }
