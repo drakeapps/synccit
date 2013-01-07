@@ -167,3 +167,17 @@ input.text {
     text-align: center;
 }
 
+.step {
+    font-size: 125%;
+    font-weight: bold;
+}
+
+.devicetitle {
+    font-size: 85%;
+    font-weight: bold;
+}
+
+.rightsidenocode {
+    text-align: right;
+    float:right;
+}

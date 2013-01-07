@@ -87,6 +87,8 @@ htmlHeader($title, $loggedin);
 </form>
     <br />
     <div id="codelist">
+        <span class="leftside devicetitle">device name</span>
+        <span class="rightsidenocode devicetitle">auth code</span><br /><br />
     <?php
         for($i=0;$i<count($user);$i++) {
             echo "<span class=\"leftside\">";

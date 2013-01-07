@@ -29,12 +29,24 @@ if($loggedin) {
     <span class="loggedin">Logged in as <?php echo $user->username; ?></span>
     <div class="cols">
         <span class="col1">
-            Stats! <br /> there aren't any yet. :(
+            <!--Stats! <br /> there aren't any yet. :(
             <br />
+            <br />-->
             <br />
-            <br />
-            <span class="center"></span><a href="addkey.php" class="biglink">Add/edit Devices</a><br /><br />
-            <a href="plugin.php" class="biglink">Download browser plugin</a></span>
+            <span class="step">Step 1.</span><br /><br />
+            <a href="addkey.php" class="biglink">Add/edit Devices</a><br /><br /><br />
+            <span class="step">Step 2.</span><br /><br />
+            <a href="plugin.php" class="biglink">Download browser plugin</a><br /><br /><br />
+            <span class="step">Step 3.</span><br /><br />
+            For chrome: go to <code>chrome://extensions</code> and drag synccit-script.crx onto page<br /><br />
+            For firefox: if it didn't automatically install, drag synccit.xpi onto firefox window to install
+
+
+            <br /><br /><br />
+            <span class="step">Step 4.</span><br /><br />
+            Go to reddit.com, enter username and auth code from <a href="addkey.php">devices page</a>.<br /><br /><br />
+            <span class="step">Step 5.</span><br /><br />
+            Do the same for your other computer to sync all the things!
         </span>
         <!--<span class="col2">
             <a href="addkey.php" class="biglink">Add/edit Devices</a>
@@ -52,7 +64,13 @@ if($loggedin) {
 } else {
     ?>
 <div id="index">
-    Take your reddit history to any device!<br /><br />Your visited links and comments are saved here, so when you browse reddit from another computer or device, your links are purple.
+    Take your reddit history to any device!
+
+    <br /><br />
+    Your visited links and comments are saved here, so when you browse reddit from another computer or device, your links are purple.
+
+    <br /><br />
+    To get started, <a href="create.php">sign up now</a>
 </div>
     <?php
 	//echo "Take your reddit history to any device!<br /><br />Your visited links and comments are saved here, so when you browse reddit from another computer or device, your links are purple.";

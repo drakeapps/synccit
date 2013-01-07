@@ -24,6 +24,10 @@ if(isset($_POST['create'])) {
         $error = "password needs to be at least 6 characters long";
     }
 
+    if(!preg_match("/^[a-zA-Z0-9_]+$/", $username)) {
+        $error = "username must consist of letters, numbers, or underscores";
+    }
+
     if(strcmp($password, $_POST['passwordconfirm'])) {
         $error = "passwords do not match";
     }
