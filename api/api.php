@@ -181,7 +181,7 @@ function insertLinks($updates, $developer, $user, $devicename) {
                 ";
                 if($commentcount != "-1") {
                     $sql .= "
-                    `lastcommentcount`  = '".$mysql->real_escape_string($commentcount)."',
+                    `lastcommentcount`  = IF(`lastcommentcount` > '".$mysql->real_escape_string($commentcount)."', `lastcommentcount`, '".$mysql->real_escape_string($commentcount)."'),
                     `lastcommenttime`   = '".$mysql->real_escape_string($commenttime)."',
                     ";
                 }

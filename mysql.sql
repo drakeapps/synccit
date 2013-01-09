@@ -16,13 +16,14 @@ CREATE TABLE IF NOT EXISTS `authcodes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userid` int(10) unsigned NOT NULL,
   `username` varchar(30) NOT NULL,
-  `authhash` text NOT NULL,
+  `authhash` varchar(20) NOT NULL,
   `description` text NOT NULL,
   `lastused` int(10) unsigned DEFAULT '0',
   `created` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `userid` (`userid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+  KEY `userid` (`userid`),
+  KEY `authhash` (`authhash`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -42,8 +43,9 @@ CREATE TABLE IF NOT EXISTS `links` (
   `developers` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `linkid` (`linkid`,`userid`),
-  KEY `links` (`linkid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+  KEY `links` (`linkid`),
+  KEY `userid` (`userid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -58,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `logincodes` (
   `lastlogin` int(10) unsigned NOT NULL,
   `created` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -81,4 +83,4 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

@@ -87,8 +87,10 @@ function htmlFooter() {
 	?>
 </div>
 <div id="footer">
+<span class="contact">contact: <a href="mailto:james&#064;&#100;&#114;&#097;&#107;&#101;apps.com">james&#064;&#100;&#114;&#097;&#107;&#101;apps.com</span>
 
-<span class="attr"><a href="http://drakeapps.com/">Drake Apps</a> | <a target="_blank" href="https://github.com/drakeapps/synccit">Open Source</a></span>
+    <div class="attr"><a href="http://drakeapps.com/">Drake Apps</a> | <a target="_blank" href="https://github.com/drakeapps/synccit">Open Source</a></div>
+<div class="smallprint">synccit is not associated with reddit.com</div>
 </div>
 </body>
 </html><?php

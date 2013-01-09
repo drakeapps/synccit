@@ -181,3 +181,17 @@ input.text {
     text-align: right;
     float:right;
 }
+
+.contact {
+    font-weight: normal;
+    font-size: 100%;
+}
+
+.contact a {
+    font-weight: normal !important;
+}
+
+.smallprint {
+    text-align: center;
+    font-size: 85%;
+}
