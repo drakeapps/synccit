@@ -7,6 +7,11 @@ include("../config.php");
 include("../functions.php");
 include("../linkclass.php");
 
+$apiversion = 1; // current version of API. this will only deal with major changes
+$apirevision = 6; // current revision. increments more. for smaller changes
+header("X-API: $apiversion");
+header("X-Revision: $apirevision");
+
 
 if(isset($_POST['data'])) {
 
@@ -16,15 +21,59 @@ if(isset($_POST['data'])) {
         } catch (Exception $e){
             xerror("xml error");
         }
-
-
         xerror("xml error");
+    } else { //we're just going to assume json if data variable is set with no type
+        $json = json_decode($_POST['data'], true);
+        if($json == false || $json == null) {
+            xerror("json error ".json_last_error());
+        }
+
+        $username   = $json["username"];
+        $auth       = $json["auth"];
+        $mode       = $json["mode"];
+        $developer  = isset($json["dev"]) ? $json["dev"] : "unknown";
+
+
+        $authinfo = checkAuth($username, $auth);
+
+        if($mode == "update") {
+            $updates = array();
+            foreach($json["links"] as $link) {
+                $id = $link["id"];
+                if(isset($link["comments"]) && $link["comments"] > -1) {
+                    $updates[$id]["comment"] = $link["comments"];
+                    if($link["both"] == true || $link["both"] == "true" || $link["both"] == 1) {
+                        $updates[$id]["link"] = 1;
+                    }
+                } else {
+                    $updates[$id]["link"] = 1;
+                }
+
+            }
+
+            insertLinks($updates, $developer, $authinfo["userid"], $authinfo["device"]);
+
+            xsuccess(count($updates)." links updated");
+
+        } else {
+            $links = array();
+            $i = 0;
+            foreach($json["links"] as $link) {
+                $links[$i++] = $link["id"];
+            }
+
+            $result = readLinks($links, $authinfo["userid"], "json");
+            echo $result;
+            die;
+        }
+
     }
 } else if(isset($_POST['username']) && isset($_POST['auth']) && $_POST['mode']) {
+    // looking at this now, this is a mess.
     if($_POST['mode'] == "update") {
         $username = $_POST['username'];
         $auth = $_POST['auth'];
-        // try to update last used time of auth. if fails, auth doesnt exist
+
 
         $authinfo = checkAuth($username, $auth);
 
@@ -257,6 +306,18 @@ function readLinks($links, $user, $type=null) {
 
         }
 
+    } else if($type=="json") {
+        $json = array();
+        $i = 0;
+        while($link = $result->fetch_assoc()) {
+            $json[$i++] = array(
+                "id"            => $link['linkid'],
+                "lastvisit"     => $link['lastvisit'],
+                "comments"      => $link['lastcommentcount'],
+                "commentvisit"  => $link['lastcommenttime']
+            );
+        }
+        $output = json_encode($json);
 
     }
 

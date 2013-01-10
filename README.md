@@ -46,14 +46,18 @@ read:
 XML:
 
     <?xml version="1.0"?>
-    <user>
-        <username>sk33t</username>
-        <auth>3xad3h</auth>
-        <dev>chrome sync</dev>
-        <devauth>kd20ck0asd1</devauth>
-        <mode>update</mode>
-    </user>
+
+    <username>sk33t</username>
+    <auth>3xad3h</auth>
+    <dev>chrome sync</dev>
+    <devauth>kd20ck0asd1</devauth>
+    <api>1</api>
+    <mode>update</mode>
+
     <links>
+        <link>
+            <id>16aeok</id>
+        </link>
         <link>
             <id>15hnia</id>
             <comments>1190</comments>
@@ -61,10 +65,84 @@ XML:
         <link>
             <id>15htdg</id>
             <comments>488</comments>
+            <both>true</both>
         </link>
     </links>
 
 
+Output:
+    <?xml version="1.0"?>
+
+    <links>
+        <link>
+            <id>15ds2s</id>
+            <time>141231231</time>
+            <comments>132</comments>
+            <commenttime>141231231</commenttime>
+        </link>
+        <link>
+            <id>15x102</id>
+            <time>-1</time>
+            <comments>414</comments>
+            <commenttime>123008123</commenttime>
+        </link>
+    </links>
+
+
+JSON:
+
+Send on POST variable data. data={your json}
+   
+    {
+        "username"  : "sk33t",
+        "auth"      : "3xad3h",
+        "dev"       : "chrome sync",
+        "devauth"   : "kd20ck0asd1",
+        "mode"      : "update",
+        "api"       : 1,
+        
+        "links"     : [
+            
+            {
+                "id"    : "15hnia"
+            },
+
+            {
+                "id"        : "16eaok",
+                "comments"  : "1190",
+                "both"      : true
+            },
+
+            {
+                "id"        : "15siwa",
+                "comments"  : "321",
+                "both"      : false
+            }
+        ]
+    }
+
+Read return:
+
+    [
+        {
+            "id"            : "15hnia",
+            "lastvisit"     : "123412123",
+            "comments"      : "0",
+            "commentvisit"  : "0"
+        },
+        {
+            "id"            : "16kfoe",
+            "lastvisit"     : "0",
+            "comments"      : "512",
+            "commentvisit"  : "132313123"
+        },
+        {
+            "id"            : "16weas",
+            "lastvisit"     : "124412324",
+            "comments"      : "124",
+            "commentvisit"  : "141231233"
+        }
+    ]
 
 
 
