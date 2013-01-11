@@ -45,53 +45,67 @@ read:
 
 XML:
 
+Send on POST variable data. data=<?xml version="1.0"?><synccit><xml></xml></synccit>
+
+Send GET or POST variable type=xml.
+
     <?xml version="1.0"?>
+    <synccit>
+        <username>sk33t</username>
+        <auth>3xad3h</auth>
+        <dev>chrome sync</dev>
+        <devauth>kd20ck0asd1</devauth>
+        <api>1</api>
+        <mode>update</mode>
 
-    <username>sk33t</username>
-    <auth>3xad3h</auth>
-    <dev>chrome sync</dev>
-    <devauth>kd20ck0asd1</devauth>
-    <api>1</api>
-    <mode>update</mode>
-
-    <links>
-        <link>
-            <id>16aeok</id>
-        </link>
-        <link>
-            <id>15hnia</id>
-            <comments>1190</comments>
-        </link>
-        <link>
-            <id>15htdg</id>
-            <comments>488</comments>
-            <both>true</both>
-        </link>
-    </links>
+        <links>
+            <link>
+                <id>16aeok</id>
+            </link>
+            <link>
+                <id>15hnia</id>
+                <comments>1190</comments>
+            </link>
+            <link>
+                <id>15htdg</id>
+                <comments>488</comments>
+                <both>true</both>
+            </link>
+        </links>
+    <synccit>
 
 
 Output:
     <?xml version="1.0"?>
-
-    <links>
-        <link>
-            <id>15ds2s</id>
-            <time>141231231</time>
-            <comments>132</comments>
-            <commenttime>141231231</commenttime>
-        </link>
-        <link>
-            <id>15x102</id>
-            <time>-1</time>
-            <comments>414</comments>
-            <commenttime>123008123</commenttime>
-        </link>
-    </links>
+    <synccit>
+        <links>
+            <link>
+                <id>121212</id>
+                <lastvisit>1357881500</lastvisit>
+                <comments>0</comments>
+                <commentvisit>0</commentvisit>
+            </link>
+            <link>
+                <id>232323</id>
+                <lastvisit>0</lastvisit>
+                <comments>1190</comments>
+                <commentvisit>1357881500</commentvisit>
+            </link>
+            <link>
+                <id>343434</id>
+                <lastvisit>1357881500</lastvisit>
+                <comments>488</comments>
+                <commentvisit>1357881500</commentvisit>
+            </link>
+        </links>
+    </synccit>
 
 
 JSON:
 
 Send on POST variable data. data={your json}
+
+Sending GET or POST variable type=json is recommended. By default goes to JSON if variable data is present
    
     {
         "username"  : "sk33t",
