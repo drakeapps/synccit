@@ -8,7 +8,7 @@ include("../functions.php");
 include("../linkclass.php");
 
 $apiversion = 1; // current version of API. this will only deal with major changes
-$apirevision = 7; // current revision. increments more. for smaller changes
+$apirevision = 8; // current revision. increments more. for smaller changes
 header("X-API: $apiversion");
 header("X-Revision: $apirevision");
 
@@ -341,8 +341,15 @@ function readLinks($links, $user, $type=null) {
 
     if($result->num_rows < 1) {
         // this probably actually shouldn't be an error
-        xerror("no links found");
-        return false;
+        if($type == "json") {
+            return "[]";
+        } else if($type == "xml") {
+            return '<?xml version="1.0"?>'."\n".'<synccit><links></links></synccit>';
+        } else {
+            xerror("no links found");
+            return false;
+        }
+
     }
 
     $output = "";
