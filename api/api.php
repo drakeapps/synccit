@@ -8,7 +8,7 @@ include("../functions.php");
 include("../linkclass.php");
 
 $apiversion = 1; // current version of API. this will only deal with major changes
-$apirevision = 6; // current revision. increments more. for smaller changes
+$apirevision = 7; // current revision. increments more. for smaller changes
 header("X-API: $apiversion");
 header("X-Revision: $apirevision");
 
