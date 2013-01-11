@@ -2,7 +2,6 @@
 
 
 
-
 API Docs:
 
 
@@ -76,6 +75,7 @@ Send GET or POST variable type=xml.
 
 
 Output:
+    
     <?xml version="1.0"?>
     <synccit>
         <links>
