@@ -19,9 +19,21 @@
 2. Run relevant part of `diff.sql` from your current version
 
 
-# API Docs:
+# API Docs
 
 API is called on api.php. This is located at [http://api.synccit.com/api.php](http://api.synccit.com/api.php). If not using synccit.com, this should be shown on devices page.
+
+Basic idea. When someone clicks on a link on reddit, the ID of link clicked is sent here. When someone clicks on a comment thread, the number of comments that thead has and it's ID is sent here. So when looking at reddit later, no matter what device, the link will show up read and if there are any new comments. 
+
+The API includes 2 variables. The API version and revision. The version is only changed when major changes to the API occur and will break older uses of it. The revision is for smaller changes. This usually means adding features or small changes that don't break any older use of the API.
+
+To determine the version and revision of the API being used, check the headers sent by api.php. `curl -I http://api.synccit.com/api.php` gives me `X-API: 1` and `X-Revision: 8`. To see how revisions change, you can check [the api.php history](https://github.com/drakeapps/synccit/commits/master/api/api.php). 
+
+**Auth code and passwords**
+
+For added security, instead of using the account password for each call, it uses an auth code. These can be created and deleted from the devices page on [synccit.com](http://synccit.com/). Auth codes are currently 6 character randomly generated strings.
+
+For ease of use on the user's side, accounts can be created and auth codes added via the API. This can allow someone without an account to be up and running with synccit within a few seconds.
 
 ## Variables
 
@@ -39,8 +51,10 @@ API is called on api.php. This is located at [http://api.synccit.com/api.php](ht
  * Action you're taking.
   * `read` - get read links/comments
   * `update` - update links/comments
+  * `create` - create new account (only for JSON/XML)
+  * `addauth` - add new authorization code (only for JSON/XML)
 * **`api`**
- * API version you're using
+ * API version you're using (not required)
  * Current version is `1`
 * **`links`**
  * Array of links (JSON/XML)
@@ -82,12 +96,24 @@ API is called on api.php. This is located at [http://api.synccit.com/api.php](ht
  * Unix time stamp of when comments were last viewed
  * Defaults to `0` if comments have never been viewed
 
+### Create account / add authorization variables (JSON/XML)
+
+* **`password`**
+ * Password for account
+* **`email`**
+ * Email to be associated with account (create account only)
+ * Not required
+* **`device`**
+ * Device name for the authorization code (add auth only)
+* **`auth`**
+ * The created auth code (add auth return)
+
 
 ## JSON
 
 JSON data is sent of POST variable `data`
 
-The GET or POST variable `type` should be json (though not required currently)
+The GET or POST variable `type` should be json (though not required)
 
 ### Example JSON update call
 
@@ -198,11 +224,72 @@ Nearly same as update call. Mode is now `read` instead of `update`
 
 Link `555555` not returned since it was never updated.
 
+***
+
+### Example JSON create account call
+
+    {
+        "username"  : "newuser",
+        "password"  : "thebestpasswordever",
+        "dev"       : "synccit demo",
+        "email"     : "newuser@synccit.com",
+        "mode"      : "create"
+    }
+
+Creates new user with username `newuser` and password `thebestpasswordever`. And an email of `newuser@synccit.com`, though email is not required. Mode is `create`
+
+**Returns**
+
+
+Success
+
+    {
+        "success"   : "account created"
+    }
+
+Error
+
+    {
+        "error"     : "ERROR_CODE"
+    }
+
+***
+
+### Example JSON add authorization call
+
+    {
+        "username"  : "newuser",
+        "password"  : "thebestpasswordever",
+        "dev"       : "synccit demo",
+        "device"    : "developer API device",
+        "mode"      : "addauth"
+    }
+
+Creates a new auth code for the user `newuser` with password `thebestpasswordever`. Device name is `developer API device`. Mode is `addauth`
+
+**Returns**
+
+Success
+
+    {
+        "success"   : "device key added",
+        "device"    : "developer API device",
+        "auth"      : "409ssj"
+    }
+
+New device key added with auth code of `409ssj`. Device name is also returned back
+
+Error
+
+    {
+        "error" : "ERROR_CODE"
+    }
+
 ## XML
 
 XML data is sent on POST variable data.
 
-The GET or POST variable `type` has to be set to xml
+The GET or POST variable `type` has to be set to xml or, as of API revision 10, the first 4 charaters of POST data are `<?xml`
 
 ### Example XML update call
 
@@ -323,6 +410,72 @@ Nearly same as update call. Mode is now `read` instead of `update`
 
 Link `555555` not returned since it was never updated.
 
+***
+
+### Example XML create account call
+
+    <?xml version="1.0"?>
+    <synccit>
+        <username>newuser</username>
+        <password>thebestpasswordever</password>
+        <dev>synccit demo</dev>
+        <email>newuser@synccit.com</email>
+        <mode>create</mode>
+    </synccit>
+
+Creates the user `newuser` with a password of `thebestpasswordever`. And an email of `newuser@synccit.com`, though email is not required. Mode is `create`
+
+**Returns**
+
+Success
+
+    <?xml version="1.0"?>
+    <synccit>
+        <success>account created</success>
+    </synccit>
+
+Error
+
+    <?xml version="1.0"?>
+    <synccit>
+        <error>ERROR_CODE</error>
+    </synccit>
+
+***
+
+### Example XML add authorization 
+
+    <?xml version="1.0"?>
+    <synccit>
+        <username>newuser</username>
+        <password>thebestpasswordever</password>
+        <dev>synccit demo</dev>
+        <device>developer API device</device>
+        <mode>addauth</mode>
+    </synccit>
+
+Creates a new auth code for the user `newuser` with password `thebestpasswordever`. Device name is `developer API device`. Mode is `addauth`
+
+**Returns**
+
+Success
+
+    <?xml version="1.0"?>
+    <synccit>
+        <success>device key added</success>
+        <device>developer API device</device>
+        <auth>303b09</auth>
+    </synccit>
+
+Returns auth code under `auth`. Use this for future API calls for this user. 
+
+Error
+
+    <?xml version="1.0"?>
+    <synccit>
+        <error>ERROR_CODE</error>
+    </synccit>
+
 ## Plain Text
 
 Data just sent as POST variables
@@ -386,6 +539,22 @@ Link `555555` not returned since it was never updated.
  * Username and auth code combination doesn't work
 * `no links requested` 
  * No links submitted to be checked
+* `no links found`
+ * None of links requested have history (only in plain text mode)
+* `database error`
+ * Error executing query. Likely something on our end
+* `username or password wrong`
+ * That username and password combination isn't valid
+
+**Create account errors**
+
+* `email not valid`
+ * Not valid email given. Only checks it '@' exists
+* `username needs to be at least 3 characters long`
+* `password needs to be at least 6 characters long`
+* `username must consist of letters, numbers, or underscores`
+* `username already exists`
+ * Username is taken. Try something else
 
 
 

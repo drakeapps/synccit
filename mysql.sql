@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `authcodes` (
   `description` text NOT NULL,
   `lastused` int(10) unsigned DEFAULT '0',
   `created` int(10) unsigned DEFAULT '0',
+  `createdby` text,
   PRIMARY KEY (`id`),
   KEY `userid` (`userid`),
   KEY `authhash` (`authhash`)
@@ -81,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `numcomments` int(8) unsigned DEFAULT '0',
   `loginattempts` int(2) unsigned DEFAULT '0',
   `created` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdby` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;

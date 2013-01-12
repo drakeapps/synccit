@@ -8,28 +8,61 @@ include("../functions.php");
 include("../linkclass.php");
 
 $apiversion = 1; // current version of API. this will only deal with major changes
-$apirevision = 8; // current revision. increments more. for smaller changes
+$apirevision = 10; // current revision. increments more. for smaller changes
 header("X-API: $apiversion");
 header("X-Revision: $apirevision");
 
 
 if(isset($_POST['data'])) {
 
+    // because I feel like people won't always do type=xml
+    // if the data starts with <?xml, it definitely isn't JSON so just make it XML
+    if(strpos($_POST['data'], "<?xml") === 0) {
+        $_REQUEST['type'] = "xml";
+    }
+
     if(strtolower($_REQUEST['type']) == "xml") {
+        // afaik SimpleXML loves throwing actual errors instead of suppressing pretty much everything
+        // put it in try catch to try to get rid of that
         try {
 
             // suppress simplexml warnings
             // if you're having issues with xml formatting, remove the @
             // also printing Exception $e in the catch will help
             @$xml = new SimpleXMLElement($_POST["data"]);
-            //print_r($xml);
             $username   = $xml -> username;
-            //echo $username;
             $auth       = $xml -> auth;
             $mode       = $xml -> mode;
             $developer  = isset($xml -> dev) ? $xml -> dev : "unknown";
 
-            $authinfo = checkAuth($username, $auth);
+            if($mode == "create") {
+                $password   = $xml -> password;
+                $email      = $xml -> email;
+
+                $r = createAccount($username, $password, $email, $developer);
+
+                if($r == "") {
+                    xsuccess("account created", "xml");
+                } else {
+                    xerror($r, "xml");
+                }
+
+
+            } else if($mode == "addauth") {
+                $password   = $xml -> password;
+                $device     = $xml -> device;
+
+                $r = addAuth($username, $password, $device, $developer);
+
+                if($r["success"] == "" ) {
+                    xerror($r["error"], "xml");
+                } else {
+                    xdevice($device, $r["success"], "xml");
+                }
+            }
+
+
+            $authinfo = checkAuth($username, $auth, "xml");
 
             if($mode == "update") {
                 $updates = array();
@@ -53,7 +86,7 @@ if(isset($_POST['data'])) {
 
                 insertLinks($updates, $developer, $authinfo["userid"], $authinfo["device"]);
 
-                xsuccess(count($updates)." links updated");
+                xsuccess(count($updates)." links updated", "xml");
             } else {
                 $links = array();
                 $i = 0;
@@ -68,13 +101,13 @@ if(isset($_POST['data'])) {
 
 
         } catch (Exception $e){
-            xerror("xml error");
+            xerror("xml error", "xml");
         }
         xerror("xml error");
     } else { //we're just going to assume json if data variable is set with no type
         $json = json_decode($_POST['data'], true);
         if($json == false || $json == null) {
-            xerror("json error ".json_last_error());
+            xerror("json error ".json_last_error(), "json");
         }
 
         $username   = $json["username"];
@@ -83,7 +116,33 @@ if(isset($_POST['data'])) {
         $developer  = isset($json["dev"]) ? $json["dev"] : "unknown";
 
 
-        $authinfo = checkAuth($username, $auth);
+        if($mode == "create") {
+            $password   = $json["password"];
+            $email      = $json["email"];
+
+            $r = createAccount($username, $password, $email, $developer);
+
+            if($r == "") {
+                xsuccess("account created", "json");
+            } else {
+                xerror($r, "json");
+            }
+
+
+        } else if($mode == "addauth") {
+            $password = $json["password"];
+            $device = $json["device"];
+
+            $r = addAuth($username, $password, $device, $developer);
+
+            if($r["success"] == "" ) {
+                xerror($r["error"], "json");
+            } else {
+                xdevice($device, $r["success"], "json");
+            }
+        }
+
+        $authinfo = checkAuth($username, $auth, "json");
 
         if($mode == "update") {
             $updates = array();
@@ -102,7 +161,7 @@ if(isset($_POST['data'])) {
 
             insertLinks($updates, $developer, $authinfo["userid"], $authinfo["device"]);
 
-            xsuccess(count($updates)." links updated");
+            xsuccess(count($updates)." links updated", "json");
 
         } else {
             $links = array();
@@ -191,7 +250,7 @@ if(isset($_POST['data'])) {
 }
 
 
-function checkAuth($username, $auth) {
+function checkAuth($username, $auth, $mode=false) {
     global $mysql;
     // seems running this and seeing if affected_rows was > 0 doesn't work.
     // this does help me get the user id I use later
@@ -217,11 +276,11 @@ function checkAuth($username, $auth) {
                 'device'    => $info['description']
             );
         } else {
-            xerror("not authorized");
+            xerror("not authorized", $mode);
         }
 
     } else {
-        xerror("not authorized");
+        xerror("not authorized", $mode);
     }
 }
 
@@ -316,7 +375,7 @@ function insertLinks($updates, $developer, $user, $devicename) {
 function readLinks($links, $user, $type=null) {
     global $mysql;
     if(count($links) < 1) {
-        xerror("no links requested");
+        xerror("no links requested", $type);
         return false;
     }
 
@@ -391,15 +450,192 @@ function readLinks($links, $user, $type=null) {
     return $output;
 }
 
+function createAccount($username, $password, $email, $developer) {
+    // This is copy and pasted from create.php
+    // Will make account creation a separate class in the future
+    $error = "";
 
-function xerror($string) {
+    if(count(explode("@", $email)) != 2 && !empty($email)) {
+        $error = "email not valid"; // meh. emails aren't required so only check if @ exists
+    }
+
+    if(strlen($username) < 3) {
+        $error = "username needs to be at least 3 characters long";
+    }
+
+    if(strlen($password) < 6) {
+        $error = "password needs to be at least 6 characters long";
+    }
+
+    if(!preg_match("/^[a-zA-Z0-9_]+$/", $username)) {
+        $error = "username must consist of letters, numbers, or underscores";
+    }
+
+    if($error == "") {
+
+        global $mysql;
+
+        $hashset = create_hash($password);
+        $pieces = explode(":", $hashset);
+        $salt = $pieces[2];
+        $hash = $pieces[3];
+
+        $sql = "INSERT INTO `user` (
+            `id`,
+            `username`,
+            `passhash`,
+            `salt`,
+            `email`,
+            `created`,
+            `lastip`,
+            `createdby`
+        ) VALUES (
+            NULL,
+            '".$mysql->real_escape_string($username)."',
+            '".$mysql->real_escape_string($hash)."',
+            '".$mysql->real_escape_string($salt)."',
+            '".$mysql->real_escape_string($email)."',
+            '".time()."',
+            '".$mysql->real_escape_string($_SERVER['REMOTE_ADDR'])."',
+            '".$mysql->real_escape_string($developer)."'
+        )";
+
+        if($mysql->query($sql)) {
+            // Success
+            // just return nothing meaning no error
+            $error = "";
+
+        } else {
+            $r = $mysql->query("SELECT * FROM `user` WHERE `username` = '".mysql_real_escape_string($username)."' LIMIT 1");
+            if($r->num_rows > 0) {
+                $error = "username already exists";
+            } else {
+                $error = "database error";
+            }
+        }
+    }
+
+    return $error;
+
+}
+
+function addAuth($username, $password, $device, $developer) {
+
+    global $mysql;
+
+    $success = "";
+    $error = "";
+
+    $key = genrand();
+
+    $userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
+
+
+    if($userinfo->num_rows > 0) {
+
+        $user = $userinfo->fetch_assoc();
+
+        $hash = $user["passhash"];
+        $salt = $user["salt"];
+
+        $hashset = "sha512:10000:".$salt.":".$hash;
+
+        $result = validate_password($password, $hashset);
+
+        if($result) {
+            $sql = "INSERT INTO `authcodes` (
+                `id`,
+                `userid`,
+                `username`,
+                `authhash`,
+                `description`,
+                `created`,
+                `createdby`
+            ) VALUES (
+                NULL,
+                '".$mysql->real_escape_string($user["id"])."',
+                '".$mysql->real_escape_string($user["username"])."',
+                '".$key."',
+                '".$mysql->real_escape_string($device)."',
+                '".time()."',
+                '".$mysql->real_escape_string($developer)."'
+            )";
+            if($res = $mysql->query($sql)) {
+                $success = $key;
+            } else {
+                $error = "database error";
+            }
+        } else {
+            $error = "username or password incorrect";
+        }
+
+
+
+
+    } else {
+        $error = "user not found";
+    }
+
+    return array("success" => $success, "error" => $error);
+
+}
+
+
+// simple outputs
+// xerror for errors
+// xsuccess for success
+// xdevice only for adding of device auths
+// $mode for output type
+// can be json or xml
+
+function xerror($string, $mode=false) {
     header("X-Error: $string");
-    echo "error: $string";
+    if($mode == "json") {
+        $json = array();
+        $json["error"] = $string;
+        echo json_encode($json);
+    } else if($mode == "xml") {
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><synccit></synccit>');
+        $xml->addChild("error", $string);
+        echo $xml->asXML();
+    } else {
+        echo "error: $string";
+    }
     exit;
 }
 
-function xsuccess($string) {
+function xsuccess($string, $mode=false) {
     header("X-Success: $string");
-    echo "success: $string";
+    if($mode == "json") {
+        $json = array();
+        $json["success"] = $string;
+        echo json_encode($json);
+    } else if($mode == "xml") {
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><synccit></synccit>');
+        $xml->addChild("success", $string);
+        echo $xml->asXML();
+    } else {
+        echo "success: $string";
+    }
+    exit;
+}
+
+function xdevice($device, $auth, $mode=false) {
+    header("X-Success: device key added");
+    if($mode == "json") {
+        $json = array();
+        $json["device"]     = $device;
+        $json["auth"]       = $auth;
+        $json["success"]    = "device key added";
+        echo json_encode($json);
+    } else if($mode == "xml") {
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><synccit></synccit>');
+        $xml->addChild("success", "device key added");
+        $xml->addChild("device", $device);
+        $xml->addChild("auth", $auth);
+        echo $xml->asXML();
+    } else {
+        echo "auth: $auth";
+    }
     exit;
 }

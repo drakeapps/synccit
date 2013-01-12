@@ -15,3 +15,14 @@ ALTER TABLE  `user` ENGINE = INNODB;
 ALTER TABLE  `authcodes` CHANGE  `authhash`  `authhash` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
 ALTER TABLE  `authcodes` ADD INDEX (  `authhash` );
 
+
+
+-- ----------------------------------------------
+
+
+-- after c4e3f2b
+
+
+-- add createdby to user and auth tables when user created by API
+ALTER TABLE  `user` ADD  `createdby` TEXT NULL DEFAULT NULL;
+ALTER TABLE  `authcodes` ADD  `createdby` TEXT NULL DEFAULT NULL;
