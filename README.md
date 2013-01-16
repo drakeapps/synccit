@@ -35,12 +35,18 @@ For added security, instead of using the account password for each call, it uses
 
 For ease of use on the user's side, accounts can be created and auth codes added via the API. This can allow someone without an account to be up and running with synccit within a few seconds.
 
+## Implementations
+
+* **synccit-android** - [Android Library](https://github.com/talklittle/synccit-android) from reddit is fun
+* **synccit-browser-extension** - [Javascript userscript](https://github.com/drakeapps/synccit-browser-extension)
+
 ## Variables
 
 * **`username`**
  * synccit username
 * **`auth`**
  * device auth code (users get this from devices page)
+ * As of revision 11, password will be accepted (though auth code should still be used instead) 
 * **`dev`**
  * Your developer name
  * Name you want to appear as, such as synccit-userscript or iReddit
