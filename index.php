@@ -38,7 +38,7 @@ if($loggedin) {
             <span class="step">Step 2.</span><br /><br />
             <a href="plugin.php" class="biglink">Download browser plugin</a><br /><br /><br />
             <span class="step">Step 3.</span><br /><br />
-            For chrome: go to <code>chrome://extensions</code> and drag synccit-script.crx onto page<br /><br />
+            For chrome: it's on the Chrome web store, shouldn't be an issue anymore<br /><br />
             For firefox: if it didn't automatically install, drag synccit.xpi onto firefox window to install
 
 
@@ -46,7 +46,7 @@ if($loggedin) {
             <span class="step">Step 4.</span><br /><br />
             Go to reddit.com, enter username and auth code from <a href="addkey.php">devices page</a>.<br /><br /><br />
             <span class="step">Step 5.</span><br /><br />
-            Do the same for your other computer to sync all the things!
+            Do the same for your other computers to sync all the things!
         </span>
         <!--<span class="col2">
             <a href="addkey.php" class="biglink">Add/edit Devices</a>

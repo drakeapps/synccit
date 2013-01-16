@@ -8,7 +8,7 @@ include("../functions.php");
 include("../linkclass.php");
 
 $apiversion = 1; // current version of API. this will only deal with major changes
-$apirevision = 10; // current revision. increments more. for smaller changes
+$apirevision = 11; // current revision. increments more. for smaller changes
 header("X-API: $apiversion");
 header("X-Revision: $apirevision");
 
@@ -276,10 +276,18 @@ function checkAuth($username, $auth, $mode=false) {
                 'device'    => $info['description']
             );
         } else {
+            $r = checkLogin($username, $auth);
+            if($r) {
+                return $r;
+            }
             xerror("not authorized", $mode);
         }
 
     } else {
+        $r = checkLogin($username, $auth);
+        if($r) {
+            return $r;
+        }
         xerror("not authorized", $mode);
     }
 }
@@ -517,6 +525,36 @@ function createAccount($username, $password, $email, $developer) {
 
     return $error;
 
+}
+
+function checkLogin($username, $password) {
+    global $mysql;
+
+
+    $userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
+
+
+    if($userinfo->num_rows > 0) {
+
+        $user = $userinfo->fetch_assoc();
+
+        $hash = $user["passhash"];
+        $salt = $user["salt"];
+
+        $hashset = "sha512:10000:".$salt.":".$hash;
+
+        $result = validate_password($password, $hashset);
+
+        if($result) {
+            return array(
+                'username'  => $user['username'],
+                'userid'    => $user['id'],
+                'device'    => "none"
+            );
+        } else {
+            return false;
+        }
+    }
 }
 
 function addAuth($username, $password, $device, $developer) {
