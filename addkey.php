@@ -24,6 +24,35 @@ if($loggedin) {
     exit;
 }
 
+if(isset($_REQUEST['do']) && isset($_REQUEST['code']) && $_REQUEST['do'] == "remove") {
+
+    $code = $_REQUEST['code'];
+
+
+    if(strcmp($hash, $_GET['hash']) == 0) {
+
+        $sql = "DELETE FROM `authcodes`
+            WHERE
+                `userid`    = '".$mysql->real_escape_string($user->id)."'
+                    AND
+                `username`  = '".$mysql->real_escape_string($user->username)."'
+                    AND
+                `authhash`  = '".$mysql->real_escape_string($code)."'
+            LIMIT 1
+        ;";
+
+
+        if($res = $mysql->query($sql)) {
+            $error = "device key removed";
+        } else {
+            //$error = "unable to remove key";
+        }
+    }
+
+    $_SESSION['temphash'] = hash("sha256", genrand());
+    $hash = $_SESSION['temphash'];
+}
+
 if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
 
     if(isset($_POST['device']) ) {
@@ -60,10 +89,10 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
 $sql = "SELECT * FROM `authcodes` WHERE `userid` = '".$mysql->real_escape_string($user->id)."' ORDER BY `created` DESC";
 $res = $mysql->query($sql);
 // this could be a separate class, but I'm pretty sure this is the only time it'll be used
-$user = array();
+$codes = array();
 $i=0;
 while($row = $res->fetch_assoc()) {
-    $user[$i++] = array(
+    $codes[$i++] = array(
         "id" => $row['id'],
         "description" => $row['description'],
         "code" => $row['authhash']
@@ -88,17 +117,36 @@ htmlHeader($title, $loggedin);
     <br />
     <div id="codelist">
         <span class="leftside devicetitle">device name</span>
-        <span class="rightsidenocode devicetitle">auth code</span><br /><br />
+        <span class="littlelink devicetitle">&nbsp;&nbsp;&nbsp;</span>
+        <span class="rightsidenocode devicetitle">auth code&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+        <br /><br />
     <?php
-        for($i=0;$i<count($user);$i++) {
+        for($i=0;$i<count($codes);$i++) {
             echo "<span class=\"leftside\">";
-            echo $user[$i]['description'];
-            echo "</span> <span class=\"rightside\">";
-            echo $user[$i]['code'];
+            echo $codes[$i]['description'];
+
+            echo "</span> ";
+
+            echo "<span class=\"littlelink\">";
+            echo "<a href=\"addkey.php?code=".$codes[$i]['code']."&amp;hash=$hash&do=remove\"
+                title=\"remove device key\"
+                onClick=\"return confirm('Are you sure you want to delete the key? Anything using this key will stop working')\">";
+
+
+            echo "&nbsp;&nbsp;&nbsp; [x]</a></span>";
+
+            echo "<span class=\"rightside\">";
+            echo $codes[$i]['code'];
             echo "</span>";
+
             echo "<br />";
         }
     ?>
+    </div>
+    <div id="apiusername">
+        <br />username<br />
+        <span class="apiurl"><?php echo htmlspecialchars($user->username); ?></span>
     </div>
     <div id="apiloc">
         <br />API Location<br />

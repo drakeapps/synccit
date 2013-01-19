@@ -16,7 +16,7 @@ htmlHeader("synccit - download browser plugin", $loggedin);
 
     <a href="https://chrome.google.com/webstore/detail/synccit-for-reddit/djgggkkgpoeknlpdllmhdagbfnhaigmd" class="biglink" target="_blank">Chrome Extension</a><br /><br />
 
-    <a href="https://github.com/drakeapps/synccit-browser-extension/raw/master/synccit.xpi" class="biglink">Firefox Plugin</a>
+    <a href="https://addons.mozilla.org/firefox/addon/synccit/" class="biglink" target="_blank">Firefox Plugin</a>
 
     <br /><br /><br />
 

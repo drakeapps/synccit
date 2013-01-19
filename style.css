@@ -195,3 +195,10 @@ input.text {
     text-align: center;
     font-size: 85%;
 }
+
+.littlelink a {
+    color:red;
+    text-decoration: none;
+    font-size: 75%;
+    float: right;
+}
