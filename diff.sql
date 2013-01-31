@@ -26,3 +26,17 @@ ALTER TABLE  `authcodes` ADD INDEX (  `authhash` );
 -- add createdby to user and auth tables when user created by API
 ALTER TABLE  `user` ADD  `createdby` TEXT NULL DEFAULT NULL;
 ALTER TABLE  `authcodes` ADD  `createdby` TEXT NULL DEFAULT NULL;
+
+
+-- ----------------------------------------------
+
+
+
+-- add index for logincode authhash for account API
+-- must change `logincodes` to a varchar instead of text to allow for index
+-- similar to the change of authhash on the authcodes tables
+-- it's a 64 character hash
+-- note, this isn't required for it to function, just should make it faster
+ALTER TABLE  `logincodes` CHANGE  `authhash`  `authhash` VARCHAR( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+ALTER TABLE  `logincodes` ADD INDEX (  `authhash` );
+

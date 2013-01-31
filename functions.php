@@ -66,6 +66,7 @@ function htmlHeader($title, $loggedin=false) {
 			<!--<li><a class="navlink" href="profile.php">profile</a></li>-->
             <li><a class="navlink" href="plugin.php">browser plugin</a></li>
             <li><a class="navlink" href="addkey.php">devices</a></li>
+            <li><a class="navlink" href="http://blog.synccit.com/" target="_blank">blog</a></li>
             <li><a class="navlink" href="logout.php?l=<?php echo $key; ?>">logout</a></li>
 			
 			<?php
@@ -73,6 +74,7 @@ function htmlHeader($title, $loggedin=false) {
 			?>
 			<li><a class="navlink" href="login.php">login</a></li>
 			<li><a class="navlink" href="create.php">create account</a></li>
+            <li><a class="navlink" href="http://blog.synccit.com/" target="_blank">blog</a></li>
 			<?php
 		}?>
 		</ul>
