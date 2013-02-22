@@ -4,24 +4,30 @@
 include("pbkdf2.php");
 
 
-// TODO: checklogged
-// check if user is logged in.
-function checkLoggedIn($authid, $userid, $authhash) {
-	
-	return false;	
-}
-
-// fetch user info
-function getUserInfo($userid) {
-	
-	
-}
-
-
-
-// saved links
-function getLinks($userid, $count, $start, $order ) {
-	
+if($prettyurls) {
+    define('DEVICESURL',       $baseurl."/devices");
+    define('LOGINURL',         $baseurl."/login");
+    define('REGISTERURL',      $baseurl."/create-account");
+    define('PLUGINURL',        $baseurl."/synccit-apps");
+    define('LOGOUTURL',        $baseurl."/logout/@s");
+    define('FAQURL',           $baseurl."/faq");
+    define('PROFILEURL',       $baseurl."/profile");
+    define('DEVICESRMURL',     $baseurl."/remove/@k/@h");
+    define('INDEXURL',         $baseurl."/");
+    define('DONATEURL',        $baseurl."/donate");
+    define('BASEURL',          $baseurl."/");
+} else {
+    define('DEVICESURL',       $baseurl."/addkey.php");
+    define('LOGINURL',         $baseurl."/login.php");
+    define('REGISTERURL',      $baseurl."/create.php");
+    define('PLUGINURL',        $baseurl."/plugin.php");
+    define('LOGOUTURL',        $baseurl."/logout.php?l=@s");
+    define('FAQURL',           $baseurl."/faq.php");
+    define('PROFILEURL',       $baseurl."/profile.php");
+    define('DEVICESRMURL',     $baseurl."/addkey.php?code=@k&amp;hash=@h&amp;do=remove");
+    define('INDEXURL',         $baseurl."/");
+    define('DONATEURL',        $baseurl."/donate.php");
+    define('BASEURL',          $baseurl."/");
 }
 
 
@@ -43,56 +49,135 @@ function htmlHeader($title, $loggedin=false) {
         $key = $session->hash;
     }
 	?>
-<!DOCTYPE HTML>
-<html>
+<!doctype html>
+<html lang="en">
+
 <head>
-<title><?php echo $title; ?></title>
-<link rel="stylesheet" href="style.css" type="text/css" />
-<!-- remember to remove the ones I'm not going to use -->
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-<!-- who am I kidding. I'm not going to remember -->
+    <meta charset="utf-8" />
+    <title><?php echo $title; ?></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 1140px Grid styles for IE -->
+    <!--[if lte IE 9]><link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" /><![endif]-->
+
+    <!-- The 1140px Grid - http://cssgrid.net/ -->
+    <link rel="stylesheet" href="css/1140.css" type="text/css" media="screen" />
+
+    <!-- Your styles -->
+    <link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" />
+
+    <!--css3-mediaqueries-js - http://code.google.com/p/css3-mediaqueries-js/ - Enables media queries in some unsupported browsers-->
+    <script type="text/javascript" src="js/css3-mediaqueries.js"></script>
+
+    <!--Title Font-->
+    <link href='http://fonts.googleapis.com/css?family=Advent+Pro:100' rel='stylesheet' type='text/css'>
+
+    <!-- body font-->
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+
+    <!-- this is for the flattr button. no reason to leave it in if you aren't using it -->
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        (function() {
+            var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+            t.parentNode.insertBefore(s, t);
+        })();
+        /* ]]> */
+    </script>
+
 </head>
+
+
 <body>
-<div id="header">
-	<div id="title">
-		<a href="index.php">synccit</a>
-	</div>
-	<div id="navbar">
-		<ul id="nav">
-		<?php
-		if($loggedin) {
-			?>
-			<!--<li><a class="navlink" href="profile.php">profile</a></li>-->
-            <li><a class="navlink" href="plugin.php">browser plugin</a></li>
-            <li><a class="navlink" href="addkey.php">devices</a></li>
-            <li><a class="navlink" href="http://blog.synccit.com/" target="_blank">blog</a></li>
-            <li><a class="navlink" href="logout.php?l=<?php echo $key; ?>">logout</a></li>
-			
-			<?php
-		} else {
-			?>
-			<li><a class="navlink" href="login.php">login</a></li>
-			<li><a class="navlink" href="create.php">create account</a></li>
-            <li><a class="navlink" href="http://blog.synccit.com/" target="_blank">blog</a></li>
-			<?php
-		}?>
-		</ul>
-	
-	</div>
+
+<div class="container">
+    <div class="row titlebar">
+        <div class="tencol">
+            <p class="title"><a href="<?php echo INDEXURL; ?>">synccit</a></p>
+        </div>
+        <div class="twocol last">
+            <div class="donate"><a href="<?php echo DONATEURL; ?>">donate</a></div>
+        </div>
+    </div>
 </div>
-<div id="content">
+
+<div class="container">
+    <div class="row menubar">
+        <?php
+        if($loggedin) {
+            ?>
+        <div class="twocol menubaritem">
+            <p><a href="<?php echo PLUGINURL; ?>">Get the apps</a></p>
+        </div>
+        <div class="twocol menubaritem">
+            <p><a href="<?php echo DEVICESURL; ?>">Manage Devices</a></p>
+        </div>
+        <div class="twocol menubaritem">
+            <p><a href="<?php echo PROFILEURL; ?>">Profile</a></p>
+        </div>
+        <div class="twocol menubaritem">
+            <p><a href="<?php echo FAQURL; ?>">FAQ</a></p>
+        </div>
+        <div class="twocol menubaritem">
+            <p><a href="http://blog.synccit.com/">Blog</a></p>
+        </div>
+        <div class="twocol menubaritem last">
+            <p><a href="<?php echo str_replace("@s", $key, LOGOUTURL); ?>">Logout</a></p>
+        </div>
+            <?php
+        } else {
+            ?>
+            <div class="twocol menubaritem">
+                <p><a href="<?php echo PLUGINURL; ?>">Get the apps</a></p>
+            </div>
+            <div class="twocol menubaritem">
+                <p><a href="<?php echo FAQURL; ?>">FAQ</a></p>
+            </div>
+            <div class="twocol menubaritem">
+                <p><a href="http://blog.synccit.com/">Blog</a></p>
+            </div>
+            <div class="twocol menubaritem">
+                <p></p>
+            </div>
+            <div class="twocol menubaritem">
+                <p><a href="<?php echo LOGINURL; ?>">Login</a></p>
+            </div>
+            <div class="twocol menubaritem register last">
+                <p><a href="<?php echo REGISTERURL; ?>">Register</a></p>
+            </div>
+            <?php
+        }?>
+</div>
+
+<div class="container">
+    <div class="row rowmain">
+
 	<?php
 }
 
 function htmlFooter() {
 	?>
-</div>
-<div id="footer">
-<span class="contact">contact: <a href="mailto:james&#064;&#100;&#114;&#097;&#107;&#101;apps.com">james&#064;&#100;&#114;&#097;&#107;&#101;apps.com</span>
+	</div>
 
-    <div class="attr"><a href="http://drakeapps.com/">Drake Apps</a> | <a target="_blank" href="https://github.com/drakeapps/synccit">Open Source</a></div>
-<div class="smallprint">synccit is not associated with reddit.com</div>
+</div>
+
+<div class="container">
+
+    <div class="row lastrow">
+        <div class="fourcol">
+            <p class="footer footleft"><a href="http://twitter.com/synccit" target="_blank">@synccit</a> | <a href="mailto:james@drakeapps.com">james@drakeapps.com</a></p>
+        </div>
+        <div class="fourcol">
+            <p class="cite"></p>
+        </div>
+        <div class="fourcol last">
+            <p class="footer footright"><a href="http://drakeapps.com" target="_blank">Drake Apps</a> | <a href="https://github.com/drakeapps/synccit" target="_blank">Open Source</a></p>
+        </div>
+    </div>
 </div>
 </body>
 </html><?php

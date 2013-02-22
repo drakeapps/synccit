@@ -25,52 +25,70 @@ htmlHeader($title, $loggedin);
 
 if($loggedin) {
 	?>
-<div id="index">
-    <span class="loggedin">Logged in as <?php echo $user->username; ?></span>
-    <div class="cols">
-        <span class="col1">
-            <!--Stats! <br /> there aren't any yet. :(
-            <br />
-            <br />-->
-            <br />
-            <span class="step">Step 1.</span><br /><br />
-            <a href="addkey.php" class="biglink">Add/edit Devices</a><br /><br /><br />
-            <span class="step">Step 2.</span><br /><br />
-            <a href="plugin.php" class="biglink">Download browser plugin</a><br /><br /><br />
-            <span class="step">Step 3.</span><br /><br />
-            For chrome: it's on the Chrome web store, shouldn't be an issue anymore<br /><br />
-            For firefox: if it didn't automatically install, drag synccit.xpi onto firefox window to install
+<div class="fourcol">
+    <h2>Step 1</h2>
+    <p class="indexloggedin">
+        <a href="<?php echo DEVICESURL; ?>"><img src="images/add.png" alt="add" width="256" /></a>
+        <br /><br />
+        <a href="<?php echo DEVICESURL; ?>">Add new device or two</a>
+    </p>
+</div>
+<div class="fourcol">
+    <h2>Step 2</h2>
+    <p class="indexloggedin">
+        <a href="<?php echo PLUGINURL; ?>"><img src="images/download.png" alt="download" width="256" /></a>
+        <br /><br />
+        <a href="<?php echo PLUGINURL; ?>">Download the apps</a>
+    </p>
+</div>
 
-
-            <br /><br /><br />
-            <span class="step">Step 4.</span><br /><br />
-            Go to reddit.com, enter username and auth code from <a href="addkey.php">devices page</a>.<br /><br /><br />
-            <span class="step">Step 5.</span><br /><br />
-            Do the same for your other computers to sync all the things!
-        </span>
-        <!--<span class="col2">
-            <a href="addkey.php" class="biglink">Add/edit Devices</a>
-        </span>
-        <span class="col3">
-            <a href="plugin.php" class="biglink">Download browser plugin</a>
-        </span>-->
-    </div>
-
-
+<div class="fourcol last">
+    <h2>Step 3</h2>
+    <p class="indexloggedin">
+        <img src="images/ok.png" alt="success" width="256" />
+        <br /><br />
+        Enter your username and an auth code in the app. Then just browse reddit!
+    </p>
 </div>
 
     <?php
     //echo "Welcome back, ".$user->username."<br /><br />stats probably. list of recently saved stuff";
 } else {
     ?>
-<div id="index">
-    Take your reddit history to any device!
+<div class="fourcol">
 
-    <br /><br />
-    Your visited links and comments are saved here, so when you browse reddit from another computer or device, your links are purple.
+    <p class="indexloggedin">
+        <img src="images/idevice.png" alt="idevice" />
+        <br /><br />
+        Track your reddit history on your phone
+    </p>
+</div>
+<div class="fourcol">
 
-    <br /><br />
-    To get started, <a href="create.php">sign up now</a>
+    <p class="indexloggedin">
+        <img src="images/laptop.png" alt="laptop" /></a>
+        <br /><br />
+        And sync it to your laptop
+    </p>
+</div>
+
+<div class="fourcol last">
+
+    <p class="indexloggedin">
+        <img src="images/idevice.png" alt="idevice" /></a>
+        <br /><br />
+        And then back to your phone
+    </p>
+</div>
+
+<div class="fourcol">
+
+</div>
+<div class="fourcol signupcolumn">
+<a href="<?php echo REGISTERURL; ?>" class="signupbutton" >Sign Up Now</a>
+</div>
+<div class="fourcol last">
+
 </div>
     <?php
 	//echo "Take your reddit history to any device!<br /><br />Your visited links and comments are saved here, so when you browse reddit from another computer or device, your links are purple.";

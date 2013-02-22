@@ -18,7 +18,7 @@ if($loggedin) {
     //$user = getUserInfo($_SESSION['user']);
     $user = new User();
     $user->login($session->user);
-    $title = "synccit - add device key";
+    $title = "device manager - synccit";
 } else {
     header("Location: index.php");
     exit;
@@ -104,55 +104,96 @@ htmlHeader($title, $loggedin);
 
 
 ?>
-<div id="center">
-    <span class="error"><?php echo $error; ?></span>
-<form action="addkey.php" method="post">
-    <input type="hidden" name="hash" value="<?php echo $hash; ?>" />
-    <label for="device">add new device</label><br />
-    <input type="text" id="device" name="device" value="device name" class="text" onblur="if (this.value == '') {this.value = 'device name';}"
-           onfocus="if (this.value == 'device name') {this.value = '';}" />
-    <br />
-    <input type="submit" name="submit" value="add device" />
-</form>
-    <br />
-    <div id="codelist">
-        <span class="leftside devicetitle">device name</span>
-        <span class="littlelink devicetitle">&nbsp;&nbsp;&nbsp;</span>
-        <span class="rightsidenocode devicetitle">auth code&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
-        <br /><br />
-    <?php
-        for($i=0;$i<count($codes);$i++) {
-            echo "<span class=\"leftside\">";
-            echo $codes[$i]['description'];
+<div class="threecol">
+    <h2>device manager</h2>
+    <p class="deviceinfo">
 
-            echo "</span> ";
+        <br />
+				<span class="bold">
+					username
+				</span>
+        <br />
+				<span class="mono">
+					<?php echo htmlspecialchars($user->username); ?>
+				</span>
+        <br />
+    </p>
+    <p class="deviceinfo">
+        <br />
+				<span class="bold">
+					API location
+				</span>
+        <br />
+				<span class="monosmall">
+					<?php echo $apiloc; ?>
+				</span>
+        <br />
+    </p>
+</div>
+<div class="sixcol">
+    <div class="devicetable">
+        <table>
+            <thead>
+            <tr>
+                <td>device name</td>
+                <td>auth code</td>
+                <td>rm</td>
+            </tr>
+            </thead>
+            <tbody>
 
-            echo "<span class=\"littlelink\">";
-            echo "<a href=\"addkey.php?code=".$codes[$i]['code']."&amp;hash=$hash&do=remove\"
+            <?php
+            for($i=0;$i<count($codes);$i++) {
+
+                $url = str_replace("@k", $codes[$i]['code'], DEVICESRMURL);
+                $url = str_replace("@h", $hash, $url);
+
+                echo "<tr>
+                <td>";
+                echo $codes[$i]['description'];
+
+                echo "</td> ";
+
+
+
+                echo "<td class=\"authcode\">";
+                echo $codes[$i]['code'];
+                echo "</td>";
+
+
+                echo "<td class=\"delete\">";
+                echo "<a href=\"$url\"
                 title=\"remove device key\"
                 onClick=\"return confirm('Are you sure you want to delete the key? Anything using this key will stop working')\">";
 
 
-            echo "&nbsp;&nbsp;&nbsp; [x]</a></span>";
+                echo "[x]</a></td>";
 
-            echo "<span class=\"rightside\">";
-            echo $codes[$i]['code'];
-            echo "</span>";
+                echo "</tr>";
+            }
+            ?>
 
-            echo "<br />";
-        }
-    ?>
+
+            </tbody>
+        </table>
     </div>
-    <div id="apiusername">
-        <br />username<br />
-        <span class="apiurl"><?php echo htmlspecialchars($user->username); ?></span>
-    </div>
-    <div id="apiloc">
-        <br />API Location<br />
-        <span class="apiurl"><?php echo $apiloc; ?></span>
+
+</div>
+<div class="threecol last">
+    <div class="adddevice">
+        <br />
+        <span class="adddevicetitle">add device</span>
+        <span class="error"><?php echo $error; ?></span>
+        <form action="<?php echo DEVICESURL; ?>" method="post">
+            <input type="hidden" name="hash" value="<?php echo $hash; ?>" />
+            <input type="text" id="device" name="device" value="" class="text" placeholder="device name" />
+            <br />
+            <input type="submit" name="submit" value="add device"/>
+        </form>
     </div>
 </div>
+
 <?php
 
 

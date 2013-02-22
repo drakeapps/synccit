@@ -1,0 +1,312 @@
+/* ============================== */
+/* ! Layout for desktop version   */
+/* ============================== */
+
+/* 
+
+started with #0066e5
+color of the app/script logo
+but hurts the eyes
+so darkened to #004498
+
+
+
+*/
+
+	body {
+		/*background-color: #004498;*/
+		/*color: #ffffff;*/
+		font-family: 'Droid Sans', sans-serif;
+		font-size: 125%;
+	}
+
+	.appdiv {
+		text-align: center;
+
+	}
+	.appdiv a {
+		text-decoration: none;
+		color: #004498;
+	}
+
+	.container {
+		background-color: #ffffff;
+	}
+
+	.register {
+		font-weight: bold;
+		color: #ff0000;
+	}
+
+	.register a {
+		color: #ff0000;
+	}
+
+	.title {
+		font-family: 'Advent Pro', sans-serif;
+		font-size: 475%;
+		padding-left: 20px;
+
+	}
+
+	.menu, .menu li{
+		display: inline;
+
+	}
+
+	.menu li {
+		padding-top: 50px;
+		padding-right: 10px;
+		padding-left: 10px;
+	}
+
+	.row {
+		background-color: #ffffff;
+		color: #004498;
+		padding-top: 25px;
+		padding-bottom: 25px;
+		margin-bottom: 10px;
+		border-bottom: thick solid #004498;
+	}
+
+	.lastrow {
+		border-bottom: thick solid #ffffff;
+	}
+
+	.titlebar {
+		background-color: #004498;
+		color: #ffffff;
+		/*border-bottom: thick solid #004498;*/
+	}
+
+	.titlebar a {
+		color: #ffffff;
+		text-decoration: none;
+
+	}
+
+	.menubar {
+		text-align: center;
+	}
+
+	.menubar a {
+		color: #004498;
+		text-decoration: none;
+	}
+
+	.menubar a:hover, .menubar a:active {
+		color: #ffffff;
+		background-color: #004498;
+	}
+
+	.rowmain {
+		padding-top: 50px;
+		padding-bottom: 50px;
+	}
+
+	.donate {
+		padding-top: 50px;
+		font-family: 'Advent Pro', sans-serif;
+		font-size: 200%;
+		padding-right: 10px;
+		display: table-cell;
+		vertical-align: middle;
+		text-align: right;
+	}
+
+	.donatecontent {
+		text-align: center;
+	}
+
+	.devicetable {
+		margin: 0 auto;
+		color: #004498;
+	}
+	.devicetable table {
+		margin-left: auto;
+		margin-right: auto;
+		
+	}
+	.devicetable table tr {
+		border: 1px solid #004498;
+		border-collapse: collapse;
+		
+		padding-bottom: 10px;
+	}
+	.devicetable table thead {
+		font-weight: bold;
+	}
+	.devicetable table tr td{
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-top: 10px;
+		border-bottom: 1px dotted #004498;
+		border-collapse: collapse;
+	}
+
+	.authcode {
+		text-align: right;
+		font-family: monospace;
+		font-size: 120%;
+	}
+
+	.delete {
+		font-size: 75%;
+		color: #ff0000;
+		text-align: center;
+
+	}
+
+	.delete a {
+		text-decoration: none;
+		color: #ff0000;
+	}
+
+	.footer {
+
+	}
+
+	.footer a {
+		text-decoration: none;
+		color: #004498;
+	}
+
+	.cite {
+		font-size: 65%;
+		text-align: center;
+	}
+
+	.footleft {
+		padding-left: 10px;
+		text-align: left;
+		font-size: 90%;
+	}
+
+	.footright {
+		padding-right: 10px;
+		text-align: right;
+		font-size: 90%;
+	}
+
+	.bold {
+		font-weight: bold;
+
+	}
+	.deviceinfo {
+		
+		padding-left: 10px;
+	}
+	.mono {
+		font-family: monospace;
+		font-size: 120%;
+	}
+	.monosmall {
+		font-family: monospace;
+		font-size: 75%;
+	}
+	.adddevice {
+		text-align: right;
+		padding-right: 10px;
+	}
+	.adddevice input {
+		font-size: 120%;
+
+	}
+	.adddevicetitle {
+		font-weight: bold;
+		font-size: 110%;
+	}
+
+	.text {
+		/*font-family: 'Ubuntu', sans-serif;
+	font-size: large;
+	padding-right: 10px;*/
+	width: 80%;
+	text-align: right;
+	font-family: 'Droid Sans', sans-serif;
+	}
+
+	.textcreate {
+		width: 80%;
+		text-align: left;	
+		font-size: large;
+		font-family: 'Droid Sans', sans-serif;
+	}
+	
+	.aside {
+		font-size: 85%;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.indexloggedin {
+		text-align: center;
+	}
+	.indexloggedin a {
+		text-decoration: none;
+		color: #004498;
+	}
+
+	.right {
+		text-align: right;
+		padding-right: 20%;
+	}
+
+	.questiontitle {
+		margin-bottom: 10px;
+	}
+
+	.questionbody {
+		margin-bottom: 20px;
+	}
+
+	.faqlist {
+		list-style-type: none;
+	}
+
+	.error {
+		color:red;
+		font-weight: bold;
+	}
+
+    .signupbutton {
+        padding: 50px 50px 50px 50px;
+        background-color: #004498;
+        color: #ffffff;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .signupcolumn {
+        padding-top: 150px;
+        padding-bottom: 50px;
+        text-align: center;
+
+    }
+
+
+/* ============================= */
+/* ! Layout for mobile version   */
+/* ============================= */
+
+@media handheld, only screen and (max-width: 767px) {
+
+	body {
+		
+	}
+
+}
+
+
+/* ========================================== */
+/* ! Provide higher res assets for iPhone 4   */
+/* ========================================== */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) { 
+
+/*	.logo {
+		background: url(logo2x.jpg) no-repeat;
+		background-size: 212px 303px;
+	}*/
+
+}

@@ -12,12 +12,15 @@ class User {
     public $numcomments;
     public $attempts;
     public $created;
+    public $passhash;
+    public $salt;
     public $loggedIn = false;
 
 
     public function login($u) {
         // this doesn't take into account any authentication
         // it assumes session has already been authorized
+        // this can also just allow you to get user information about any user
         $u = (int) $u;
         if($u == 0) {
             return false;
@@ -41,6 +44,8 @@ class User {
         $this->numcomments = htmlspecialchars($user["numcomments"]);
         $this->attempts = htmlspecialchars($user["attempts"]);
         $this->created = htmlspecialchars($user["created"]);
+        $this->passhash = $user["passhash"];
+        $this->salt = $user["salt"];
 
 
         $this->loggedIn = true;

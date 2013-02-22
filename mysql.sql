@@ -1,5 +1,4 @@
 
-
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
@@ -25,6 +24,19 @@ CREATE TABLE IF NOT EXISTS `authcodes` (
   KEY `userid` (`userid`),
   KEY `authhash` (`authhash`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `faq`
+--
+
+CREATE TABLE IF NOT EXISTS `faq` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -57,10 +69,11 @@ CREATE TABLE IF NOT EXISTS `links` (
 CREATE TABLE IF NOT EXISTS `logincodes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userid` int(10) unsigned NOT NULL,
-  `authhash` text NOT NULL,
+  `authhash` varchar(64) NOT NULL,
   `lastlogin` int(10) unsigned NOT NULL,
   `created` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `authhash` (`authhash`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

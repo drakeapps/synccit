@@ -1,52 +1,25 @@
+# Account API Docs
 
-# **[API Docs on Wiki](https://github.com/drakeapps/synccit/wiki/API)**
-
-# Requirements
-
-* PHP 5.3
-* MySQL database
-
-# Installing
-
-1. Create new database (using mysql command, phpMyAdmin, etc.)
-2. Run mysql.sql on database (using mysql command, phpMyAdmin, etc.)
-3. Edit `config.php` with database info and API location
-4. Site should up and running. Go to index.php in browser
-
-#Updating
-
-1. Replace all files except config.php
-2. Run relevant part of `diff.sql` from your current version
-
-
-# API Docs
-
-API is called on api.php. This is located at [http://api.synccit.com/api.php](http://api.synccit.com/api.php). If not using synccit.com, this should be shown on devices page.
+The Account API is called on account.php. This is located at [http://api.synccit.com/account.php](http://api.synccit.com/account.php). If not using synccit.com, this should be shown on devices page.
 
 Basic idea. When someone clicks on a link on reddit, the ID of link clicked is sent here. When someone clicks on a comment thread, the number of comments that thead has and it's ID is sent here. So when looking at reddit later, no matter what device, the link will show up read and if there are any new comments. 
 
 The API includes 2 variables. The API version and revision. The version is only changed when major changes to the API occur and will break older uses of it. The revision is for smaller changes. This usually means adding features or small changes that don't break any older use of the API.
 
-To determine the version and revision of the API being used, check the headers sent by api.php. `curl -I http://api.synccit.com/api.php` gives me `X-API: 1` and `X-Revision: 8`. To see how revisions change, you can check [the api.php history](https://github.com/drakeapps/synccit/commits/master/api/api.php). 
+To determine the version and revision of the API being used, check the headers sent by api.php. `curl -I http://api.synccit.com/account.php` gives me `X-API: 1` and `X-Revision: 1`. To see how revisions change, you can check [the account.php history](https://github.com/drakeapps/synccit/commits/master/api/account.php). 
 
-**Auth code and passwords**
+**Login code and passwords**
 
-For added security, instead of using the account password for each call, it uses an auth code. These can be created and deleted from the devices page on [synccit.com](http://synccit.com/). Auth codes are currently 6 character randomly generated strings.
-
-For ease of use on the user's side, accounts can be created and auth codes added via the API. This can allow someone without an account to be up and running with synccit within a few seconds.
-
-## Implementations
-
-* **synccit-android** - [Android Library](https://github.com/talklittle/synccit-android) from reddit is fun
-* **synccit-browser-extension** - [Javascript userscript](https://github.com/drakeapps/synccit-browser-extension)
+For added security, instead of using the account password for each call, it uses an login code. These are created and returned by doing a login call. This is similar to the auth code of the standard API, but is longer and the user never interacts with it.
 
 ## Variables
 
 * **`username`**
  * synccit username
-* **`auth`**
- * device auth code (users get this from devices page)
- * As of revision 11, password will be accepted (though auth code should still be used instead) 
+* **`login`**
+ * login code returned by login command
+ * Like auth code in standard API, but much longer and user never interacts with it
+ * Note: not needed for create and login calls
 * **`dev`**
  * Your developer name
  * Name you want to appear as, such as synccit-userscript or iReddit
@@ -55,40 +28,28 @@ For ease of use on the user's side, accounts can be created and auth codes added
  * Note: Not implemented yet. This will allow you to ensure only you can use your developer name
 * **`mode`**
  * Action you're taking.
-  * `read` - get read links/comments
-  * `update` - update links/comments
-  * `create` - create new account (only for JSON/XML)
-  * `addauth` - add new authorization code (only for JSON/XML)
+  * `create` - create new account
+  * `login` - check username/password and get login code
+  * `delete` - delete auth code 
+  * `history` - returns last 20 links visited
+  * `devices` - returns list of devices with auth codes
+  * `addauth` - add new device/auth code
 * **`api`**
  * API version you're using (not required)
  * Current version is `1`
-* **`links`**
- * Array of links (JSON/XML)
- * Comma separated list of link ids (Plain Text)
-* **`comments`**
- * Only for plain text mode
- * Comma separated list of link ids with comment count
- * Link id and comment count separated by `:`
 
-### Link update variables (JSON/XML)
+### Devices (returned) variables
 
-* **`id`**
- * Reddit link id. 6 character (usually) unique id for each reddit link
- * Ex: `http://www.reddit.com/r/Android/comments/16bond/amazon_introduces_autorip_a_new_service_that/`
- * `id` would be `16bond`
-* **`comments`**
- * Number of reddit comments
- * If not present, only link will update
-* **`both`**
- * `true`/`false`
- * Only matters when `comments` set
- * If `true`, link will be marked as visited and comment count updated (for self posts)
- * If `false` (assumed), only comment count will be updated
-* **`time`**
- * Not implemented yet
- * Custom time to mark link as read
+* **`auth`**
+ * The auth code of the device
+ * Usually a 6 character string
+* **`device`**
+ * Device name
+ * The device name the user entered while setting up the auth codes
+* **`created`**
+ * Unix timestamp of when the device was added
 
-### Link (returned) read variables (JSON/XML)
+### History (returned) read variables
 
 * **`id`**
  * Reddit link id (see above)
@@ -102,17 +63,13 @@ For ease of use on the user's side, accounts can be created and auth codes added
  * Unix time stamp of when comments were last viewed
  * Defaults to `0` if comments have never been viewed
 
-### Create account / add authorization variables (JSON/XML)
+### Create account variables (JSON/XML)
 
 * **`password`**
  * Password for account
 * **`email`**
  * Email to be associated with account (create account only)
  * Not required
-* **`device`**
- * Device name for the authorization code (add auth only)
-* **`auth`**
- * The created auth code (add auth return)
 
 
 ## JSON
@@ -561,31 +518,3 @@ Link `555555` not returned since it was never updated.
 * `username must consist of letters, numbers, or underscores`
 * `username already exists`
  * Username is taken. Try something else
-
-
-
-# License
-
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-PBKDF2 file from https://defuse.ca/php-pbkdf2.htm
-Released under public domain
-
-Blue icons from http://mebaze.com/freebies/bunch-of-cool-bluish-icons
-
-1140 css grid from http://cssgrid.net/
-
-laptop/iphone icon http://brsev.deviantart.com/

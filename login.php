@@ -92,22 +92,34 @@ if(isset($_POST['login'])) {
 htmlHeader("login - synccit");
 
 ?>
-<div id="center">
+<div class="fourcol">
+    <h2>login</h2>
+</div>
+<div class="fourcol">
 
 	<span class="error"><?php echo $error; ?></span><br /><br />
 	<form action="login.php" method="post">
 	
 	<input type="hidden" name="hash" value="<?php echo $hash; ?>" />
 	<label for="username">username</label><br />
-	<input type="text" id="username" name="username" value="<?php echo $username; ?>" class="text" />
+	<input type="text" id="username" name="username" value="<?php echo $username; ?>" class="textcreate" />
 	<br /><br />
 	<label for="password">password</label><br />
-	<input type="password" id="password" name="password" value="" class="text" />
+	<input type="password" id="password" name="password" value="" class="textcreate" />
 	<br /><br />
 	
 	<input type="submit" value="login" name="login" class="submit" />
 	
 	</form>
+</div>
+<div class="fourcol last">
+    <p class="aside">
+        <span class="bold">Privacy</span>:<br /><br />
+        We won't reveal your username, password, or email to any third parties.
+        We won't spam your email or send out any unsolicited emails without a quick and easy way to unsubscribe.
+        Link information may be used for stats and other neat things, but the information will be kept anonymous.
+        For added security, use a different username and password than your reddit account.
+    </p>
 </div>
 <?php
 

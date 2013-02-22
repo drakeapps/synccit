@@ -21,6 +21,12 @@ $baseurl = "/rsync";
 $apiloc = "http://localhost/rsync/api/";
 
 
+// Pretty URLs. Need server configured properly
+$prettyurls = false;
+
+
+
+
 $mysql = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 if($mysql->connect_errno) {
 	echo "database connection failure <!-- ".$mysql->connect_error." -->";
