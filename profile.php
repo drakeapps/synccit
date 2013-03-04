@@ -101,7 +101,7 @@ $_SESSION['temphash'] = hash("sha256", genrand());
             <input type="hidden" name="hash" value="<?php echo $_SESSION['temphash']; ?>" />
             <input type="hidden" name="do" value="edit" />
             username<br />
-            <p class="right bold">james</p>
+            <p class="right bold"><?php echo $user->username; ?></p>
 
             <label for="email">email</label><br />
             <input type="text" id="email" name="email" value="<?php echo $user->email; ?>" class="textcreate" />
