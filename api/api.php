@@ -29,6 +29,9 @@ if(isset($_POST['data'])) {
             // suppress simplexml warnings
             // if you're having issues with xml formatting, remove the @
             // also printing Exception $e in the catch will help
+
+            // send correct content-type header
+            header("Content-type: application/rss+xml");
             @$xml = new SimpleXMLElement($_POST["data"]);
             $username   = $xml -> username;
             $auth       = $xml -> auth;
@@ -105,6 +108,8 @@ if(isset($_POST['data'])) {
         }
         xerror("xml error");
     } else { //we're just going to assume json if data variable is set with no type
+        // send correct content-type header
+        header("Content-type: application/json");
         $json = json_decode($_POST['data'], true);
         if($json == false || $json == null) {
             xerror("json error ".json_last_error(), "json");
@@ -185,13 +190,13 @@ if(isset($_POST['data'])) {
 
         $authinfo = checkAuth($username, $auth);
 
-        if(strpos($_POST['links'], ",") === FALSE) {
+        if(isset($_POST['links']) && strpos($_POST['links'], ",") === FALSE) {
             $links = array($_POST['links']);
         } else {
             $links = explode(",", $_POST['links']);
         }
         //var_dump($links);
-        if(strpos($_POST['comments'], ",") === FALSE) {
+        if(isset($_POST['comments']) && strpos($_POST['comments'], ",") === FALSE) {
             $comments = array($_POST['comments']);
         } else {
             $comments = explode(",", $_POST['comments']);
