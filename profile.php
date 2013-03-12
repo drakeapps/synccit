@@ -62,7 +62,6 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
                 LIMIT 1
                   ";
 
-        echo $sql;
         if($mysql->query($sql)) {
             $error = "updated successfully";
         } else {
