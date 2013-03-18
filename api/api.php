@@ -90,6 +90,12 @@ if(isset($_POST['data'])) {
                 insertLinks($updates, $developer, $authinfo["userid"], $authinfo["device"]);
 
                 xsuccess(count($updates)." links updated", "xml");
+            } else if($mode == "history") {
+                $count      = $xml -> offset;
+                $time       = $xml -> time;
+                $result = historyLinks($authinfo["userid"], "xml", $count, $time);
+                echo $result;
+                die;
             } else {
                 $links = array();
                 $i = 0;
@@ -119,6 +125,7 @@ if(isset($_POST['data'])) {
         $auth       = $json["auth"];
         $mode       = $json["mode"];
         $developer  = isset($json["dev"]) ? $json["dev"] : "unknown";
+
 
 
         if($mode == "create") {
@@ -168,6 +175,12 @@ if(isset($_POST['data'])) {
 
             xsuccess(count($updates)." links updated", "json");
 
+        } else if($mode == "history") {
+            $count      = $json["offset"];
+            $time       = $json["time"];
+            $result = historyLinks($authinfo["userid"], "json", $count, $time);
+            echo $result;
+            die;
         } else {
             $links = array();
             $i = 0;
@@ -404,6 +417,95 @@ function readLinks($links, $user, $type=null) {
     $sql .= "
         1=0) AND
         `userid` = '".$mysql->real_escape_string($user)."'
+    ";
+
+    //echo $sql;
+
+
+    $result = $mysql->query($sql);
+
+    if($result->num_rows < 1) {
+        // this probably actually shouldn't be an error
+        if($type == "json") {
+            return "[]";
+        } else if($type == "xml") {
+            return '<?xml version="1.0"?>'."\n".'<synccit><links></links></synccit>';
+        } else {
+            xerror("no links found");
+            return false;
+        }
+
+    }
+
+    $output = "";
+
+    if(is_null($type)) {
+
+        while($link = $result->fetch_assoc()) {
+
+            $output .= $link['linkid'].":".$link['lastvisit'].";".$link['lastcommentcount'].":".$link['lastcommenttime'].",\n";
+
+        }
+
+    } else if($type=="json") {
+        $json = array();
+        $i = 0;
+        while($link = $result->fetch_assoc()) {
+            $json[$i++] = array(
+                "id"            => $link['linkid'],
+                "lastvisit"     => $link['lastvisit'],
+                "comments"      => $link['lastcommentcount'],
+                "commentvisit"  => $link['lastcommenttime']
+            );
+        }
+        $output = json_encode($json);
+
+    } else if($type="xml") {
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><synccit></synccit>');
+        $links = $xml->addChild("links");
+        while($link = $result->fetch_assoc()) {
+            $l = $links->addChild("link");
+            $l->addChild("id", $link['linkid']);
+            $l->addChild("lastvisit", $link["lastvisit"]);
+            $l->addChild("comments", $link["lastcommentcount"]);
+            $l->addChild("commentvisit", $link["lastcommenttime"]);
+        }
+        $output = $xml->asXML();
+    }
+
+    return $output;
+}
+
+/**
+ * @param $links offset count
+ * @param $user userid
+ * @param null $type json, xml
+ * @param $time time since last call
+ * @return bool|string output
+ *
+ *
+ */
+
+function historyLinks($user, $type=null, $links=0, $time=0) {
+    global $mysql;
+
+
+
+    $sql = "
+        SELECT * FROM `links`
+         WHERE ";
+
+    if($time > 0) {
+        $time = (int) $time;
+        $sql .= " (`lastvisit` >= '$time' OR `lastcommenttime` >= '$time') AND ";
+    }
+
+    $links = (int) $links;
+
+    $sql .= "
+        `userid` = '".$mysql->real_escape_string($user)."'
+
+        LIMIT $links, 100
     ";
 
     //echo $sql;

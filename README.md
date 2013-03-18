@@ -38,6 +38,7 @@ For ease of use on the user's side, accounts can be created and auth codes added
 ## Implementations
 
 * **synccit-android** - [Android Library](https://github.com/talklittle/synccit-android) from reddit is fun
+* **AFSynccitAPIClient** - [iOS/Cocoa Client](https://github.com/amleszk/AFSynccitAPIClient)
 * **synccit-browser-extension** - [Javascript userscript](https://github.com/drakeapps/synccit-browser-extension)
 
 ## Variables
@@ -56,6 +57,7 @@ For ease of use on the user's side, accounts can be created and auth codes added
 * **`mode`**
  * Action you're taking.
   * `read` - get read links/comments
+  * `history` - get read links/comments since `time` (only for JSON/XML)
   * `update` - update links/comments
   * `create` - create new account (only for JSON/XML)
   * `addauth` - add new authorization code (only for JSON/XML)
@@ -69,6 +71,16 @@ For ease of use on the user's side, accounts can be created and auth codes added
  * Only for plain text mode
  * Comma separated list of link ids with comment count
  * Link id and comment count separated by `:`
+* **`time`**
+ * Only for history call
+ * Unix timestamp to get links since that time
+ * Optional. Defaults to 0
+* **`offset`**
+ * Only for history call
+ * History returns at most 100 links per call
+ * To get further, set `offset` a multiple of 100
+ * Ex. links 101-200, `offset` needs to be 100
+ * Optional. Defaults to 0
 
 ### Link update variables (JSON/XML)
 
@@ -229,6 +241,62 @@ Nearly same as update call. Mode is now `read` instead of `update`
 * `333333` - Link visited at `1357891889`. 313 comments read
 
 Link `555555` not returned since it was never updated.
+
+***
+
+### Example JSON history call
+
+    {
+        "username"  : "james",
+        "auth"      : "9m89x0",
+        "dev"       : "synccit json",
+        "mode"      : "history",
+        "offset"    : "0",
+        "time"      : "1357891889"
+
+    }
+
+Nearly same as read call. Mode is now `history` instead of `read`
+
+Gets the links visited since `time`. Will return at most 100 links. To get links 101-200, make `offset` 100. For 201-300, `offset` = 200, etc.
+
+`time` and `offset` are optional, and will default to 0.
+
+**Returns**
+
+    [
+        {
+            "id"            : "111111",
+            "lastvisit"     : "1357891889",
+            "comments"      : "0",
+            "commentvisit"  : "0"
+        },
+        {
+            "id"            : "222222",
+            "lastvisit"     : "0",
+            "comments"      : "132",
+            "commentvisit"  : "1357891889"
+        },
+        {
+            "id"            : "333333",
+            "lastvisit"     : "1357891889",
+            "comments"      : "313",
+            "commentvisit"  : "1357891889"
+        },
+        {
+            "id"            : "444444",
+            "lastvisit"     : "1357891889",
+            "comments"      : "0",
+            "commentvisit"  : "0"
+        }
+    ]
+
+4 links are returned.
+
+* `111111` - Link visited at `1357891889`. Comments never viewed
+* `222222` - 132 comments read. Link never visited
+* `333333` - Link visited at `1357891889`. 313 comments read
+* `444444` - Link visited at `1357891889`. Comments never viewed
 
 ***
 
@@ -415,6 +483,66 @@ Nearly same as update call. Mode is now `read` instead of `update`
 * `333333` - Link visited at `1357891889`. 313 comments read
 
 Link `555555` not returned since it was never updated.
+
+***
+
+### Example XML history call
+
+    <?xml version="1.0"?>
+    <synccit>
+        <username>james</username>
+        <auth>9m89x0</auth>
+        <dev>synccit xml</dev>
+        <mode>history</mode>
+        <offset>0</offset>
+        <time>1357881500</time>
+    </synccit>
+
+Nearly same as read call. Mode is now `history` instead of `read`
+
+Gets the links visited since `time`. Will return at most 100 links. To get links 101-200, make `offset` 100. For 201-300, `offset` = 200, etc.
+
+`time` and `offset` are optional, and will default to 0.
+
+
+**Returns**
+
+    <?xml version="1.0"?>
+    <synccit>
+        <links>
+            <link>
+                <id>111111</id>
+                <lastvisit>1357881500</lastvisit>
+                <comments>0</comments>
+                <commentvisit>0</commentvisit>
+            </link>
+            <link>
+                <id>222222</id>
+                <lastvisit>0</lastvisit>
+                <comments>132</comments>
+                <commentvisit>1357881500</commentvisit>
+            </link>
+            <link>
+                <id>333333</id>
+                <lastvisit>1357881500</lastvisit>
+                <comments>313</comments>
+                <commentvisit>1357881500</commentvisit>
+            </link>
+            <link>
+                <id>444444</id>
+                <lastvisit>1357881500</lastvisit>
+                <comments>0</comments>
+                <commentvisit>0</commentvisit>
+            </link>
+        </links>
+    </synccit>
+
+4 links are returned.
+
+* `111111` - Link visited at `1357881500`. Comments never viewed
+* `222222` - 132 comments read. Link never visited
+* `333333` - Link visited at `1357891889`. 313 comments read
+* `444444` - Link visited at `1357881500`. Comments never viewed
 
 ***
 
