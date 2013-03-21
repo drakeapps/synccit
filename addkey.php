@@ -151,7 +151,7 @@ htmlHeader($title, $loggedin);
 
                 echo "<tr>
                 <td>";
-                echo $codes[$i]['description'];
+                echo strip_tags($codes[$i]['description']);
 
                 echo "</td> ";
 
