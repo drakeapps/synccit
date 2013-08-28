@@ -88,3 +88,7 @@ htmlHeader("FAQ - synccit - reddit history/link sync", $loggedin);
             <?php endfor; ?>
     </ul>
 </div>
+
+<?php
+
+htmlFooter();
