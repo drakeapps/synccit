@@ -285,6 +285,15 @@ so darkened to #004498
     }
 
 
+    .resetlink a {
+        font-weight: bold;
+        float: right;
+        text-decoration: underline;
+        color: #004498;
+        font-size: 95%;
+    }
+
+
 /* ============================= */
 /* ! Layout for mobile version   */
 /* ============================= */

@@ -16,6 +16,10 @@ $dbname = "rddtsync";
 // otherwise /foldername with no trailing slash
 $baseurl = "/rsync";
 
+// added for password reset emails
+// your host no trailing slash
+$basehost = "http://localhost";
+
 
 // API location
 $apiloc = "http://localhost/rsync/api/";
@@ -23,6 +27,19 @@ $apiloc = "http://localhost/rsync/api/";
 
 // Pretty URLs. Need server configured properly
 $prettyurls = false;
+
+
+// For password reset emails
+// using smtp servers
+$smtpserver = "smtp.gmail.com";
+$smtpauth   = true;
+$smtpuser   = "noreply@drakeapps.com";
+$smtppass   = "password";
+$smtpenc    = "ssl";
+$smtpport   = 465;
+
+$fromemail = "noreply@drakeapps.com";
+
 
 
 

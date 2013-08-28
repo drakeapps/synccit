@@ -91,7 +91,7 @@ htmlHeader("create account - synccit");
 </div>
 <div class="fourcol">
     <span class="error"><?php echo $error; ?></span><br /><br />
-    <form action="create.php" method="post">
+    <form action="<?php echo REGISTERURL; ?>" method="post">
 
         <input type="hidden" name="hash" value="<?php echo $hash; ?>" />
         <label for="username">username</label><br />

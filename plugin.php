@@ -41,15 +41,21 @@ htmlHeader("Get the synccit apps - synccit - reddit history/link sync", $loggedi
 
     <br />
 
+    <a href="https://itunes.apple.com/us/app/amrc-client-for-reddit/id572391252?mt=8" target="_blank"><img src="<?php echo BASEURL; ?>images/amrc.png" alt="amrc" /></a>
+    <br />
+    <span class="appname"><a href="https://itunes.apple.com/us/app/amrc-client-for-reddit/id572391252?mt=8" target="_blank">amrc (iOS)</a></span>
+
+    <br /><br />
+
     <a href="https://play.google.com/store/apps/details?id=com.andrewshu.android.redditdonation" target="_blank"><img src="<?php echo BASEURL; ?>images/reddit-is-fun-golden.png" alt="reddit is fun golden" /></a>
     <br />
-    <span class="appname"><a href="https://play.google.com/store/apps/details?id=com.andrewshu.android.redditdonation" target="_blank">reddit is fun - golden platinum</a></span>
+    <span class="appname"><a href="https://play.google.com/store/apps/details?id=com.andrewshu.android.redditdonation" target="_blank">reddit is fun - golden platinum (Android)</a></span>
 
     <br /><br />
 
     <a href="https://play.google.com/store/apps/details?id=com.andrewshu.android.reddit" target="_blank"><img src="<?php echo BASEURL; ?>images/reddit-is-fun-golden.png" alt="reddit is fun" /></a>
     <br />
-    <span class="appname"><a href="https://play.google.com/store/apps/details?id=com.andrewshu.android.reddit" target="_blank">reddit is fun</a></span>
+    <span class="appname"><a href="https://play.google.com/store/apps/details?id=com.andrewshu.android.reddit" target="_blank">reddit is fun (Android)</a></span>
 
     <br /><br />
 

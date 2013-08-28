@@ -6,6 +6,7 @@ include("pbkdf2.php");
 
 if($prettyurls) {
     define('DEVICESURL',       $baseurl."/devices");
+    define('RESETURL',         $baseurl."/reset");
     define('LOGINURL',         $baseurl."/login");
     define('REGISTERURL',      $baseurl."/create-account");
     define('PLUGINURL',        $baseurl."/synccit-apps");
@@ -18,6 +19,7 @@ if($prettyurls) {
     define('BASEURL',          $baseurl."/");
 } else {
     define('DEVICESURL',       $baseurl."/addkey.php");
+    define('RESETURL',         $baseurl."/reset.php");
     define('LOGINURL',         $baseurl."/login.php");
     define('REGISTERURL',      $baseurl."/create.php");
     define('PLUGINURL',        $baseurl."/plugin.php");

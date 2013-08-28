@@ -98,7 +98,7 @@ htmlHeader("login - synccit");
 <div class="fourcol">
 
 	<span class="error"><?php echo $error; ?></span><br /><br />
-	<form action="login.php" method="post">
+	<form action="<?php echo LOGINURL; ?>" method="post">
 	
 	<input type="hidden" name="hash" value="<?php echo $hash; ?>" />
 	<label for="username">username</label><br />
@@ -111,6 +111,10 @@ htmlHeader("login - synccit");
 	<input type="submit" value="login" name="login" class="submit" />
 	
 	</form>
+
+
+    <br /><br />
+    <span class="resetlink"><a href="<?php echo RESETURL; ?>">reset password</a></span>
 </div>
 <div class="fourcol last">
     <p class="aside">

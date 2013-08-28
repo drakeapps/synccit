@@ -70,3 +70,17 @@ INSERT INTO `faq` (`id`, `question`, `answer`) VALUES
 (5, 'I forgot my password', 'Currently, this can only be manually done. Email james@drakeapps.com from your account email'),
 (6, 'How do I change synccit info in the browser add ons?', 'Scroll to the bottom of a reddit page and click the synccit link'),
 (7, 'My favorite reddit app doesn''t support synccit. What can I do?', 'Suggest their support. The API is <a href="https://github.com/drakeapps/synccit#api-docs">open and documented</a>, and the more support they see, the more likely it is that they''ll add support.');
+
+
+
+-- after ac8c681
+
+-- adds password reset hash and boolean canreset to user table
+-- changes faq entry about resetting password
+
+
+
+UPDATE  `rddtsync`.`faq` SET  `answer` =  'Go <a href="http://synccit.com/reset.php">here</a> to reset your password' WHERE  `faq`.`id` =5;
+
+ALTER TABLE  `user` ADD  `resethash` TEXT NULL;
+ALTER TABLE  `user` ADD  `canreset` INT( 1 ) NOT NULL DEFAULT  '0';

@@ -96,6 +96,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `loginattempts` int(2) unsigned DEFAULT '0',
   `created` int(10) unsigned NOT NULL DEFAULT '0',
   `createdby` text,
+  `resethash` text,
+  `canreset` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
