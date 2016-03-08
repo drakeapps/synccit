@@ -33,16 +33,16 @@ if(isset($_REQUEST['do']) && isset($_REQUEST['code']) && $_REQUEST['do'] == "rem
 
         $sql = "DELETE FROM `authcodes`
             WHERE
-                `userid`    = '".$mysql->real_escape_string($user->id)."'
+                `userid`    = '".pg_escape_string($user->id)."'
                     AND
-                `username`  = '".$mysql->real_escape_string($user->username)."'
+                `username`  = '".pg_escape_string($user->username)."'
                     AND
-                `authhash`  = '".$mysql->real_escape_string($code)."'
+                `authhash`  = '".pg_escape_string($code)."'
             LIMIT 1
         ;";
 
 
-        if($res = $mysql->query($sql)) {
+        if($res = $pg_query($sql)) {
             $error = "device key removed";
         } else {
             //$error = "unable to remove key";
@@ -67,13 +67,13 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
             `created`
         ) VALUES (
             NULL,
-            '".$mysql->real_escape_string($user->id)."',
-            '".$mysql->real_escape_string($user->username)."',
+            '".pg_escape_string($user->id)."',
+            '".pg_escape_string($user->username)."',
             '".$key."',
-            '".$mysql->real_escape_string($_POST['device'])."',
+            '".pg_escape_string($_POST['device'])."',
             '".time()."'
         )";
-        if($res = $mysql->query($sql)) {
+        if($res = pg_query($sql)) {
             $error = "device key added";
         } else {
             $error = "database error";
@@ -86,12 +86,12 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
 
 }
 
-$sql = "SELECT * FROM `authcodes` WHERE `userid` = '".$mysql->real_escape_string($user->id)."' ORDER BY `created` DESC";
-$res = $mysql->query($sql);
+$sql = "SELECT * FROM `authcodes` WHERE `userid` = '".pg_escape_string($user->id)."' ORDER BY `created` DESC";
+$res = pg_query($sql);
 // this could be a separate class, but I'm pretty sure this is the only time it'll be used
 $codes = array();
 $i=0;
-while($row = $res->fetch_assoc()) {
+while($row = pg_fetch_array($res, null, PGSQL_ASSOC)) {
     $codes[$i++] = array(
         "id" => $row['id'],
         "description" => $row['description'],

@@ -44,9 +44,5 @@ $fromemail = "noreply@drakeapps.com";
 
 
 
-$mysql = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
-if($mysql->connect_errno) {
-	echo "database connection failure <!-- ".$mysql->connect_error." -->";
-	die;
-}
-
+$pgsql = pg_connect("host=$dbhost dbname=$dbname user=$dbuser password=$dbpass)
+	or die("database connection failure <!-- ".pg_last_error()." -->");

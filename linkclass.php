@@ -15,14 +15,13 @@ class Link {
 
     public function loadLink($i) {
 
-        global $mysql;
-        $sql = "SELECT * FROM `links` WHERE `linkid` = '".$mysql->real_escape_string($i)."' LIMIT 1";
+        $sql = "SELECT * FROM `links` WHERE `linkid` = '".pg_escape_string($i)."' LIMIT 1";
 
-        if(!($res = $mysql->query($sql))) {
+        if(!($res = pg_query($sql))) {
             return false;
         }
 
-        $link = $res->fetch_assoc();
+        $link = pg_fetch_array($res, null, PGSQL_ASSOC);
 
         $this->id = $link["id"];
         $this->redditid = $link["linkid"];

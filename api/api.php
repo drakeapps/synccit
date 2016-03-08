@@ -269,7 +269,6 @@ if(isset($_POST['data'])) {
 
 
 function checkAuth($username, $auth, $mode=false) {
-    global $mysql;
     // seems running this and seeing if affected_rows was > 0 doesn't work.
     // this does help me get the user id I use later
     // but just using username probably wouldn't be a bad idea
@@ -282,7 +281,7 @@ function checkAuth($username, $auth, $mode=false) {
         WHERE
             `username` = '".$mysql->real_escape_string($username)."' AND
             `authhash` = '".$mysql->real_escape_string($auth)."' LIMIT 1";
-    
+
 
     if($res = $mysql->query($sql)) {
         //var_dump($result);
@@ -314,7 +313,6 @@ function checkAuth($username, $auth, $mode=false) {
 // basic logic is try to insert
 // if fails, then update row
 function insertLinks($updates, $developer, $user, $devicename) {
-    global $mysql;
     //var_dump($updates);
     // just realized foreach can do keys. should change it
     while($current = current($updates)) {
@@ -399,7 +397,6 @@ function insertLinks($updates, $developer, $user, $devicename) {
 // text, xml, json
 // default (null) is text
 function readLinks($links, $user, $type=null) {
-    global $mysql;
     if(count($links) < 1) {
         xerror("no links requested", $type);
         return false;
@@ -487,7 +484,6 @@ function readLinks($links, $user, $type=null) {
  */
 
 function historyLinks($user, $type=null, $links=0, $time=0) {
-    global $mysql;
 
 
 
@@ -588,7 +584,6 @@ function createAccount($username, $password, $email, $developer) {
 
     if($error == "") {
 
-        global $mysql;
 
         $hashset = create_hash($password);
         $pieces = explode(":", $hashset);
@@ -635,7 +630,6 @@ function createAccount($username, $password, $email, $developer) {
 }
 
 function checkLogin($username, $password) {
-    global $mysql;
 
 
     $userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
@@ -666,7 +660,6 @@ function checkLogin($username, $password) {
 
 function addAuth($username, $password, $device, $developer) {
 
-    global $mysql;
 
     $success = "";
     $error = "";

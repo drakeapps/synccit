@@ -25,14 +25,13 @@ class User {
         if($u == 0) {
             return false;
         }
-        global $mysql;
-        $sql = "SELECT * FROM `user` WHERE `id` = '".$mysql->real_escape_string($u)."' LIMIT 1";
+        $sql = "SELECT * FROM `user` WHERE `id` = '".pg_escape_string($u)."' LIMIT 1";
 
-        $res = $mysql->query($sql);
+        $res = pg_query($sql);
         if($res->num_rows < 1) {
             return false;
         }
-        $user = $res->fetch_assoc();
+        $user = pg_fetch_array($res, null, PGSQL_ASSOC);
 
         $this->id = $u;
         $this->username = htmlspecialchars($user["username"]);

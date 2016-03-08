@@ -43,8 +43,8 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
             $hash = $pieces[3];
 
             $addsql = " ,
-                `passhash` = '".$mysql->real_escape_string($hash)."',
-                `salt` = '".$mysql->real_escape_string($salt)."'
+                `passhash` = '".pg_escape_string($hash)."',
+                `salt` = '".pg_escape_string($salt)."'
                 ";
         }
 
@@ -52,7 +52,7 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
             UPDATE
                 `user`
                 SET
-                  `email` = '".$mysql->real_escape_string($email)."'
+                  `email` = '".pg_escape_string($email)."'
 
                   $addsql
 
@@ -62,7 +62,7 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
                 LIMIT 1
                   ";
 
-        if($mysql->query($sql)) {
+        if(pg_query($sql)) {
             $error = "updated successfully";
         } else {
             $error = "database error. try again";
@@ -74,12 +74,12 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
 
 
 }
-$links = $mysql->query("SELECT count(*) as `count` FROM `links` WHERE `userid` = '".$mysql->real_escape_string($user->id)."'");
-$links = $links->fetch_assoc();
+$links = pg_query("SELECT count(*) as `count` FROM `links` WHERE `userid` = '".pg_escape_string($user->id)."'");
+$links = pg_fetch_array($links, null, PGSQL_ASSOC);
 $links = $links['count'];
 
-$devices = $mysql->query("SELECT count(*) as `count` FROM `authcodes` where `userid` = '".$mysql->real_escape_string($user->id)."'");
-$devices = $devices->fetch_assoc();
+$devices = pg_query("SELECT count(*) as `count` FROM `authcodes` where `userid` = '".pg_escape_string($user->id)."'");
+$devices = pg_fetch_array($devices, null, PGSQL_ASSOC);
 $devices = $devices['count'];
 
 htmlHeader("edit your profile - synccit - reddit history/link sync", $loggedin);

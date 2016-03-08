@@ -18,11 +18,11 @@ if($_POST['reset'] == "reset") {
     // check if it's a valid-ish email. it's not nothing. and it at least contains an @
     } else if(isset($_POST['email']) && $_POST['email'] != "" && count(explode("@", $_POST['email'])) == 2) {
 
-        $sql = "SELECT * FROM `user` WHERE `email` = '".$mysql->real_escape_string($_POST['email'])."' LIMIT 1";
+        $sql = "SELECT * FROM `user` WHERE `email` = '".pg_escape_string($_POST['email'])."' LIMIT 1";
 
-        $user = $mysql->query($sql);
+        $user = pg_query($sql);
 
-        $user = $user->fetch_assoc();
+        $user = pg_fetch_array($user, null, PGSQL_ASSOC);
 
         if($user) {
 
@@ -36,14 +36,14 @@ if($_POST['reset'] == "reset") {
                 $sql = "
                     UPDATE `user`
                         SET
-                          `resethash` = '".$mysql->real_escape_string($reset_hash)."',
+                          `resethash` = '".pg_escape_string($reset_hash)."',
                           `canreset` = '1'
                         WHERE
-                            `id` = '".$mysql->real_escape_string($user_id)."'
+                            `id` = '".pg_escape_string($user_id)."'
                         LIMIT 1
                  ";
 
-                $mysql->query($sql);
+                pg_query($sql);
 
 
 
@@ -80,15 +80,15 @@ if(isset($_GET['u']) && ((int) $_GET['u'] > 0) && isset($_GET['t'])) {
     $u = (int) $_GET['u'];
     $sql = "SELECT * FROM `user`
             WHERE
-                `id` = '".$mysql->real_escape_string($u)."'
+                `id` = '".pg_escape_string($u)."'
                     AND
-                `resethash` = '".$mysql->real_escape_string($_GET['t'])."'
+                `resethash` = '".pg_escape_string($_GET['t'])."'
                     AND
                 `canreset` = '1'
             LIMIT 1";
 
-    $user = $mysql->query($sql);
-    $user = $user->fetch_assoc();
+    $user = pg_query($sql);
+    $user = pg_fetch_array($user, null, PGSQL_ASSOC);
 
     if($user) {
 
@@ -107,15 +107,15 @@ if(isset($_GET['u']) && ((int) $_GET['u'] > 0) && isset($_GET['t'])) {
         $sql = "
                 UPDATE `user`
                     SET
-                      `passhash` = '".$mysql->real_escape_string($hash)."',
-                      `salt` = '".$mysql->real_escape_string($salt)."',
+                      `passhash` = '".pg_escape_string($hash)."',
+                      `salt` = '".pg_escape_string($salt)."',
                       `canreset` = '0'
                     WHERE
-                        `id` = '".$mysql->real_escape_string($user_id)."'
+                        `id` = '".pg_escape_string($user_id)."'
                     LIMIT 1
             ";
 
-        $reset = $mysql->query($sql);
+        $reset = pg_query($sql);
 
         if($reset) {
             send_email(

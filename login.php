@@ -12,16 +12,16 @@ if($session->isLoggedIn()) {
 //TODO add hash to login form to prevent csrf
 
 
-if(isset($_POST['login'])) {	
+if(isset($_POST['login'])) {
 
 	$error = "";
-	
+
 	$username = htmlspecialchars($_POST['username']);
-	
+
 	// check username validity
 	$password = $_POST['password'];
 
-	$userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
+	$userinfo = pg_query("SELECT * FROM `user` WHERE `username` = '".pg_escape_string($username)."' LIMIT 1");
 
     if($userinfo->num_rows > 0) {
 
@@ -29,7 +29,7 @@ if(isset($_POST['login'])) {
 
 
 
-        $row = $userinfo->fetch_assoc();
+        $row = pg_fetch_array($userinfo, null, PGSQL_ASSOC);
 
         $hash = $row["passhash"];
         $salt = $row["salt"];
@@ -54,14 +54,14 @@ if(isset($_POST['login'])) {
                 `created`
             ) VALUES (
                 NULL,
-                '".$mysql->real_escape_string($userid)."',
-                '".$mysql->real_escape_string($session->hash)."',
+                '".pg_escape_string($userid)."',
+                '".pg_escape_string($session->hash)."',
                 '".time()."',
                 '".time()."'
             )";
 
-            if($mysql->query($sql)) {
-                $id = $mysql->insert_id;
+            if($r = pg_query($sql)) {
+                $id = pg_last_oid($r);
 
                 //$error = $session->hash;
 
@@ -84,9 +84,9 @@ if(isset($_POST['login'])) {
     } else {
         $error = "username or password wrong";
     }
-	
-	
-} 
+
+
+}
 
 
 htmlHeader("login - synccit");
@@ -99,7 +99,7 @@ htmlHeader("login - synccit");
 
 	<span class="error"><?php echo $error; ?></span><br /><br />
 	<form action="<?php echo LOGINURL; ?>" method="post">
-	
+
 	<input type="hidden" name="hash" value="<?php echo $hash; ?>" />
 	<label for="username">username</label><br />
 	<input type="text" id="username" name="username" value="<?php echo $username; ?>" class="textcreate" />
@@ -107,9 +107,9 @@ htmlHeader("login - synccit");
 	<label for="password">password</label><br />
 	<input type="password" id="password" name="password" value="" class="textcreate" />
 	<br /><br />
-	
+
 	<input type="submit" value="login" name="login" class="submit" />
-	
+
 	</form>
 
 

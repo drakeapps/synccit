@@ -54,7 +54,6 @@ if(!isset($sql)) {
 
 
 function getSQL($platform=null) {
-    global $mysql;
     if($platform != null) {
         return "SELECT * FROM `apps` WHERE `platform` = '".$mysql->real_escape_string($platform)."'";
     } else {

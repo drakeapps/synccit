@@ -61,13 +61,12 @@ class Session {
     public function isLoggedIn() {
 
         $this->restorePHPSession();
-        global $mysql;
-        $sql = "SELECT * FROM `logincodes` WHERE `id` = '".$mysql->real_escape_string($this->id)."' LIMIT 1";
+        $sql = "SELECT * FROM `logincodes` WHERE `id` = '".pg_escape_string($this->id)."' LIMIT 1";
 
 
-        $result = $mysql->query($sql);
+        $result = pg_query($sql);
         if($result->num_rows > 0) {
-            $info = $result->fetch_assoc();
+            $info = pg_fetch_array($result, null, PGSQL_ASSOC);
             if(strcmp($info["id"], $this->id) == 0) {
                 $this->setHash($info["authhash"]);
                 $this->setUser($info["userid"]);

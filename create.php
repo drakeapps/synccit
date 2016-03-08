@@ -31,13 +31,13 @@ if(isset($_POST['create'])) {
     if(strcmp($password, $_POST['passwordconfirm'])) {
         $error = "passwords do not match";
     }
-    
+
     /*$hashset = create_hash($password);
         $pieces = explode(":", $hashset);
         $salt = $pieces[2];
         $hash = $pieces[3];*/
-    
-    //$error = $mysql->real_escape_string($username)." ".$email." ".$password." ".$salt." ".$hash;
+
+    //$error = pg_escape_string($username)." ".$email." ".$password." ".$salt." ".$hash;
 
     // no errors. make acct
     if($error == "") {
@@ -57,21 +57,21 @@ if(isset($_POST['create'])) {
             `lastip`
         ) VALUES (
             NULL,
-            '".$mysql->real_escape_string($username)."',
-            '".$mysql->real_escape_string($hash)."',
-            '".$mysql->real_escape_string($salt)."',
-            '".$mysql->real_escape_string($email)."',
+            '".pg_escape_string($username)."',
+            '".pg_escape_string($hash)."',
+            '".pg_escape_string($salt)."',
+            '".pg_escape_string($email)."',
             '".time()."',
-            '".$mysql->real_escape_string($_SERVER['REMOTE_ADDR'])."'
+            '".pg_escape_string($_SERVER['REMOTE_ADDR'])."'
         )";
 
-        if($mysql->query($sql)) {
+        if(pg_query($sql)) {
             //REDIRECT TO LOGIN
             header("Location: login.php");
             exit;
         } else {
-            $r = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
-            if($r->num_rows > 0) {
+            $r = pg_query("SELECT * FROM `user` WHERE `username` = '".pg_escape_string($username)."' LIMIT 1");
+            if(pg_num_rows($r) > 0) {
                 $error = "username already exists";
             } else {
                 $error = "database error";

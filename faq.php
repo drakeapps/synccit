@@ -7,13 +7,13 @@ include("userclass.php");
 
 $loggedin = $session->isLoggedIn();
 
-$faq = $mysql->query("SELECT * FROM `faq`");
+$faq = pg_query("SELECT * FROM `faq`");
 
 $questions = array();
 
 $i=0;
 
-while($r = $faq->fetch_assoc()) {
+while($r = pg_fetch_array($faq, null, PGSQL_ASSOC)) {
     $questions[$i]["id"]                = $r['id'];
     $questions[$i]["question"]          = $r["question"];
     $questions[$i]["answer"]            = $r["answer"];
