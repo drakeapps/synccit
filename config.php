@@ -44,5 +44,5 @@ $fromemail = "noreply@drakeapps.com";
 
 
 
-$pgsql = pg_connect("host=$dbhost dbname=$dbname user=$dbuser password=$dbpass)
+$pgsql = pg_connect("host=$dbhost dbname=$dbname user=$dbuser password=$dbpass")
 	or die("database connection failure <!-- ".pg_last_error()." -->");
