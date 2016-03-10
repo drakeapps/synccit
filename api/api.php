@@ -333,7 +333,6 @@ function insertLinks($updates, $developer, $user, $devicename) {
             $sql = "
                 INSERT INTO links
                 (
-                  id,
                   linkid,
                   userid,
                   lastvisit,
@@ -343,7 +342,6 @@ function insertLinks($updates, $developer, $user, $devicename) {
                   lastcall,
                   developers
                 ) VALUES (
-                  NULL,
                   '".$mysql->real_escape_string($linkid)."',
                   '".$mysql->real_escape_string($user)."',
                   '".$mysql->real_escape_string($linktime)."',
@@ -591,7 +589,6 @@ function createAccount($username, $password, $email, $developer) {
         $hash = $pieces[3];
 
         $sql = "INSERT INTO user (
-            id,
             username,
             passhash,
             salt,
@@ -600,7 +597,6 @@ function createAccount($username, $password, $email, $developer) {
             lastip,
             createdby
         ) VALUES (
-            NULL,
             '".$mysql->real_escape_string($username)."',
             '".$mysql->real_escape_string($hash)."',
             '".$mysql->real_escape_string($salt)."',
@@ -682,7 +678,6 @@ function addAuth($username, $password, $device, $developer) {
 
         if($result) {
             $sql = "INSERT INTO authcodes (
-                id,
                 userid,
                 username,
                 authhash,
@@ -690,7 +685,6 @@ function addAuth($username, $password, $device, $developer) {
                 created,
                 createdby
             ) VALUES (
-                NULL,
                 '".$mysql->real_escape_string($user["id"])."',
                 '".$mysql->real_escape_string($user["username"])."',
                 '".$key."',

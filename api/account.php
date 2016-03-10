@@ -270,7 +270,6 @@ function insertLinks($updates, $developer, $user, $devicename) {
             $sql = "
                 INSERT INTO links
                 (
-                  id,
                   linkid,
                   userid,
                   lastvisit,
@@ -280,7 +279,6 @@ function insertLinks($updates, $developer, $user, $devicename) {
                   lastcall,
                   developers
                 ) VALUES (
-                  NULL,
                   '".pg_escape_string($linkid)."',
                   '".pg_escape_string($user)."',
                   '".pg_escape_string($linktime)."',
@@ -539,7 +537,6 @@ function createAccount($username, $password, $email, $developer) {
         $hash = $pieces[3];
 
         $sql = "INSERT INTO users (
-            id,
             username,
             passhash,
             salt,
@@ -548,7 +545,6 @@ function createAccount($username, $password, $email, $developer) {
             lastip,
             createdby
         ) VALUES (
-            NULL,
             '".pg_escape_string($username)."',
             '".pg_escape_string($hash)."',
             '".pg_escape_string($salt)."',
@@ -617,7 +613,6 @@ function addAuth($username, $userid, $device, $developer) {
 
 
     $sql = "INSERT INTO authcodes (
-        id,
         userid,
         username,
         authhash,
@@ -625,7 +620,6 @@ function addAuth($username, $userid, $device, $developer) {
         created,
         createdby
     ) VALUES (
-        NULL,
         '".pg_escape_string($userid)."',
         '".pg_escape_string($username)."',
         '".$key."',
@@ -673,13 +667,11 @@ function addLogin($username, $password, $developer) {
 
         if($result) {
             $sql = "INSERT INTO logincodes (
-                id,
                 userid,
                 authhash,
                 lastlogin,
                 created
             ) VALUES (
-                NULL,
                 '".pg_escape_string($user["id"])."',
                 '".pg_escape_string($loginhash)."',
                 '".time()."',

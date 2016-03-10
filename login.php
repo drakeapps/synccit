@@ -23,7 +23,7 @@ if(isset($_POST['login'])) {
 
 	$userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
-    if($userinfo->num_rows > 0) {
+    if(pg_num_rows($userinfo) > 0) {
 
         $error = $hashset;
 
@@ -47,19 +47,18 @@ if(isset($_POST['login'])) {
             $session->generateHash();
 
             $sql = "INSERT INTO logincodes (
-                id,
                 userid,
                 authhash,
                 lastlogin,
                 created
             ) VALUES (
-                NULL,
                 '".pg_escape_string($userid)."',
                 '".pg_escape_string($session->hash)."',
                 '".time()."',
                 '".time()."'
             )";
-
+		echo $sql;
+end;
             if($r = pg_query($sql)) {
                 $id = pg_last_oid($r);
 

@@ -59,14 +59,12 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
         $key = genrand();
 
         $sql = "INSERT INTO authcodes (
-            id,
             userid,
             username,
             authhash,
             description,
             created
         ) VALUES (
-            NULL,
             '".pg_escape_string($user->id)."',
             '".pg_escape_string($user->username)."',
             '".$key."',

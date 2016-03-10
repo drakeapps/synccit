@@ -48,7 +48,6 @@ if(isset($_POST['create'])) {
         $hash = $pieces[3];
 
         $sql = "INSERT INTO users (
-            id,
             username,
             passhash,
             salt,
@@ -56,7 +55,6 @@ if(isset($_POST['create'])) {
             created,
             lastip
         ) VALUES (
-            NULL,
             '".pg_escape_string($username)."',
             '".pg_escape_string($hash)."',
             '".pg_escape_string($salt)."',
