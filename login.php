@@ -56,11 +56,10 @@ if(isset($_POST['login'])) {
                 '".pg_escape_string($session->hash)."',
                 '".time()."',
                 '".time()."'
-            )";
-
-            if($r = pg_query($sql)) {
-                $id = pg_last_oid($r);
-
+            ) RETURNING id";
+            
+	if($r = pg_query($sql)) {
+                $id = pg_fetch_result($r, 0, "id");
                 //$error = $session->hash;
 
                 $session->setUser($userid);
