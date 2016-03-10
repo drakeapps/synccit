@@ -650,7 +650,7 @@ function addLogin($username, $password, $developer) {
     $userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
-    if($userinfo->num_rows > 0) {
+    if(pg_num_rows($userinfo) > 0) {
 
         $user = pg_fetch_array($userinfo, null, PGSQL_ASSOC);
 

@@ -57,8 +57,7 @@ if(isset($_POST['login'])) {
                 '".time()."',
                 '".time()."'
             )";
-		echo $sql;
-end;
+
             if($r = pg_query($sql)) {
                 $id = pg_last_oid($r);
 

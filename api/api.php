@@ -275,18 +275,18 @@ function checkAuth($username, $auth, $mode=false) {
     /*$sql = "UPDATE authcodes
         SET lastused = '".time()."'
         WHERE
-            username = '".$mysql->real_escape_string($username)."' AND
-            authhash = '".$mysql->real_escape_string($auth)."' LIMIT 1";*/
+            username = '".pg_escape_string($username)."' AND
+            authhash = '".pg_escape_string($auth)."' LIMIT 1";*/
     $sql = "SELECT * FROM authcodes
         WHERE
-            username = '".$mysql->real_escape_string($username)."' AND
-            authhash = '".$mysql->real_escape_string($auth)."' LIMIT 1";
+            username = '".pg_escape_string($username)."' AND
+            authhash = '".pg_escape_string($auth)."' LIMIT 1";
 
 
-    if($res = $mysql->query($sql)) {
+    if($res = pg_query($sql)) {
         //var_dump($result);
-        if($res->num_rows > 0) {
-            $info = $res->fetch_assoc();
+        if(pg_num_rows($res) > 0) {
+            $info = pg_fetch_array($res);
             return array(
                 'username'  => $info['username'],
                 'userid'    => $info['userid'],
@@ -342,16 +342,16 @@ function insertLinks($updates, $developer, $user, $devicename) {
                   lastcall,
                   developers
                 ) VALUES (
-                  '".$mysql->real_escape_string($linkid)."',
-                  '".$mysql->real_escape_string($user)."',
-                  '".$mysql->real_escape_string($linktime)."',
-                  '".$mysql->real_escape_string($commenttime)."',
-                  '".$mysql->real_escape_string($commentcount)."',
-                  '".$mysql->real_escape_string($linktime)."',
-                  '".$mysql->real_escape_string($devicename)."',
-                  '".$mysql->real_escape_string($developer)."'
+                  '".pg_escape_string($linkid)."',
+                  '".pg_escape_string($user)."',
+                  '".pg_escape_string($linktime)."',
+                  '".pg_escape_string($commenttime)."',
+                  '".pg_escape_string($commentcount)."',
+                  '".pg_escape_string($linktime)."',
+                  '".pg_escape_string($devicename)."',
+                  '".pg_escape_string($developer)."'
                 )";
-            $res = $mysql->query($sql);
+            $res = pg_query($sql);
             if(!$res) {
 
                 $sql = "
@@ -360,28 +360,28 @@ function insertLinks($updates, $developer, $user, $devicename) {
                 ";
                 if($commentcount != "-1") {
                     $sql .= "
-                    lastcommentcount  = IF(lastcommentcount > '".$mysql->real_escape_string($commentcount)."', lastcommentcount, '".$mysql->real_escape_string($commentcount)."'),
-                    lastcommenttime   = '".$mysql->real_escape_string($commenttime)."',
+                    lastcommentcount  = IF(lastcommentcount > '".pg_escape_string($commentcount)."', lastcommentcount, '".pg_escape_string($commentcount)."'),
+                    lastcommenttime   = '".pg_escape_string($commenttime)."',
                     ";
                 }
                 if($linktime != 0) {
                     $sql .= "
-                    lastvisit = '".$mysql->real_escape_string($linktime)."',
-                    firstvisit = IF (firstvisit = 0, '".$mysql->real_escape_string($linktime)."', firstvisit),
+                    lastvisit = '".pg_escape_string($linktime)."',
+                    firstvisit = IF (firstvisit = 0, '".pg_escape_string($linktime)."', firstvisit),
                     ";
                 }
                 $sql .= "
-                    lastcall = '".$mysql->real_escape_string($devicename)."',
-                    developers = IFNULL(CONCAT(developers, ', ".$mysql->real_escape_string($developer)."'), '".$mysql->real_escape_string($developer)."')
+                    lastcall = '".pg_escape_string($devicename)."',
+                    developers = IFNULL(CONCAT(developers, ', ".pg_escape_string($developer)."'), '".pg_escape_string($developer)."')
 
                     WHERE
-                        linkid = '".$mysql->real_escape_string($linkid)."'
+                        linkid = '".pg_escape_string($linkid)."'
                     AND
-                        userid = '".$mysql->real_escape_string($user)."'
+                        userid = '".pg_escape_string($user)."'
 
                     LIMIT 1
                 ";
-                $res = $mysql->query($sql);
+                $res = pg_query($sql);
                 //var_dump($res);
             }
             //var_dump($res);
@@ -405,21 +405,21 @@ function readLinks($links, $user, $type=null) {
         WHERE ( ";
 
     foreach($links as $link) {
-        $sql .= " linkid = '".$mysql->real_escape_string($link)."' OR ";
+        $sql .= " linkid = '".pg_escape_string($link)."' OR ";
     }
 
     // 1=0 to get rid of extra OR
     $sql .= "
         1=0) AND
-        userid = '".$mysql->real_escape_string($user)."'
+        userid = '".pg_escape_string($user)."'
     ";
 
     //echo $sql;
 
 
-    $result = $mysql->query($sql);
+    $result = pg_query($sql);
 
-    if($result->num_rows < 1) {
+    if(pg_num_rows($result) < 1) {
         // this probably actually shouldn't be an error
         if($type == "json") {
             return "[]";
@@ -436,7 +436,7 @@ function readLinks($links, $user, $type=null) {
 
     if(is_null($type)) {
 
-        while($link = $result->fetch_assoc()) {
+        while($link = pg_fetch_assoc($result)) {
 
             $output .= $link['linkid'].":".$link['lastvisit'].";".$link['lastcommentcount'].":".$link['lastcommenttime'].",\n";
 
@@ -445,7 +445,7 @@ function readLinks($links, $user, $type=null) {
     } else if($type=="json") {
         $json = array();
         $i = 0;
-        while($link = $result->fetch_assoc()) {
+        while($link = pg_fetch_assoc($result)) {
             $json[$i++] = array(
                 "id"            => $link['linkid'],
                 "lastvisit"     => $link['lastvisit'],
@@ -458,7 +458,7 @@ function readLinks($links, $user, $type=null) {
     } else if($type="xml") {
         $xml = new SimpleXMLElement('<?xml version="1.0"?><synccit></synccit>');
         $links = $xml->addChild("links");
-        while($link = $result->fetch_assoc()) {
+        while($link = pg_fetch_assoc($result)) {
             $l = $links->addChild("link");
             $l->addChild("id", $link['linkid']);
             $l->addChild("lastvisit", $link["lastvisit"]);
@@ -497,7 +497,7 @@ function historyLinks($user, $type=null, $links=0, $time=0) {
     $links = (int) $links;
 
     $sql .= "
-        userid = '".$mysql->real_escape_string($user)."'
+        userid = '".pg_escape_string($user)."'
 
         LIMIT $links, 100
     ";
@@ -505,9 +505,9 @@ function historyLinks($user, $type=null, $links=0, $time=0) {
     //echo $sql;
 
 
-    $result = $mysql->query($sql);
+    $result = pg_query($sql);
 
-    if($result->num_rows < 1) {
+    if(pg_num_rows($result) < 1) {
         // this probably actually shouldn't be an error
         if($type == "json") {
             return "[]";
@@ -524,7 +524,7 @@ function historyLinks($user, $type=null, $links=0, $time=0) {
 
     if(is_null($type)) {
 
-        while($link = $result->fetch_assoc()) {
+        while($link = pg_fetch_assoc($result)) {
 
             $output .= $link['linkid'].":".$link['lastvisit'].";".$link['lastcommentcount'].":".$link['lastcommenttime'].",\n";
 
@@ -533,7 +533,7 @@ function historyLinks($user, $type=null, $links=0, $time=0) {
     } else if($type=="json") {
         $json = array();
         $i = 0;
-        while($link = $result->fetch_assoc()) {
+        while($link = pg_fetch_assoc($result)) {
             $json[$i++] = array(
                 "id"            => $link['linkid'],
                 "lastvisit"     => $link['lastvisit'],
@@ -546,7 +546,7 @@ function historyLinks($user, $type=null, $links=0, $time=0) {
     } else if($type="xml") {
         $xml = new SimpleXMLElement('<?xml version="1.0"?><synccit></synccit>');
         $links = $xml->addChild("links");
-        while($link = $result->fetch_assoc()) {
+        while($link = pg_fetch_assoc($result)) {
             $l = $links->addChild("link");
             $l->addChild("id", $link['linkid']);
             $l->addChild("lastvisit", $link["lastvisit"]);
@@ -597,23 +597,23 @@ function createAccount($username, $password, $email, $developer) {
             lastip,
             createdby
         ) VALUES (
-            '".$mysql->real_escape_string($username)."',
-            '".$mysql->real_escape_string($hash)."',
-            '".$mysql->real_escape_string($salt)."',
-            '".$mysql->real_escape_string($email)."',
+            '".pg_escape_string($username)."',
+            '".pg_escape_string($hash)."',
+            '".pg_escape_string($salt)."',
+            '".pg_escape_string($email)."',
             '".time()."',
-            '".$mysql->real_escape_string($_SERVER['REMOTE_ADDR'])."',
-            '".$mysql->real_escape_string($developer)."'
+            '".pg_escape_string($_SERVER['REMOTE_ADDR'])."',
+            '".pg_escape_string($developer)."'
         )";
 
-        if($mysql->query($sql)) {
+        if(pg_query($sql)) {
             // Success
             // just return nothing meaning no error
             $error = "";
 
         } else {
-            $r = $mysql->query("SELECT * FROM users WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
-            if($r->num_rows > 0) {
+            $r = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
+            if(pg_num_rows($r) > 0) {
                 $error = "username already exists";
             } else {
                 $error = "database error";
@@ -628,12 +628,12 @@ function createAccount($username, $password, $email, $developer) {
 function checkLogin($username, $password) {
 
 
-    $userinfo = $mysql->query("SELECT * FROM users WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
+    $userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
-    if($userinfo->num_rows > 0) {
+    if(pg_num_rows($userinfo) > 0) {
 
-        $user = $userinfo->fetch_assoc();
+        $user = pg_fetch_assoc($userinfo);
 
         $hash = $user["passhash"];
         $salt = $user["salt"];
@@ -662,12 +662,12 @@ function addAuth($username, $password, $device, $developer) {
 
     $key = genrand();
 
-    $userinfo = $mysql->query("SELECT * FROM users WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
+    $userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
-    if($userinfo->num_rows > 0) {
+    if(pg_num_rows($userinfo) > 0) {
 
-        $user = $userinfo->fetch_assoc();
+        $user = pg_fetch_assoc($userinfo);
 
         $hash = $user["passhash"];
         $salt = $user["salt"];
@@ -685,14 +685,14 @@ function addAuth($username, $password, $device, $developer) {
                 created,
                 createdby
             ) VALUES (
-                '".$mysql->real_escape_string($user["id"])."',
-                '".$mysql->real_escape_string($user["username"])."',
+                '".pg_escape_string($user["id"])."',
+                '".pg_escape_string($user["username"])."',
                 '".$key."',
-                '".$mysql->real_escape_string($device)."',
+                '".pg_escape_string($device)."',
                 '".time()."',
-                '".$mysql->real_escape_string($developer)."'
+                '".pg_escape_string($developer)."'
             )";
-            if($res = $mysql->query($sql)) {
+            if($res = pg_query($sql)) {
                 $success = $key;
             } else {
                 $error = "database error";

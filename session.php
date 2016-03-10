@@ -65,7 +65,7 @@ class Session {
 
 
         $result = pg_query($sql);
-        if($result->num_rows > 0) {
+        if(pg_num_rows($result) > 0) {
             $info = pg_fetch_array($result, null, PGSQL_ASSOC);
             if(strcmp($info["id"], $this->id) == 0) {
                 $this->setHash($info["authhash"]);
