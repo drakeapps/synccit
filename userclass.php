@@ -25,7 +25,7 @@ class User {
         if($u == 0) {
             return false;
         }
-        $sql = "SELECT * FROM `user` WHERE `id` = '".pg_escape_string($u)."' LIMIT 1";
+        $sql = "SELECT * FROM user WHERE id = '".pg_escape_string($u)."' LIMIT 1";
 
         $res = pg_query($sql);
         if($res->num_rows < 1) {

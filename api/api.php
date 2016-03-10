@@ -272,15 +272,15 @@ function checkAuth($username, $auth, $mode=false) {
     // seems running this and seeing if affected_rows was > 0 doesn't work.
     // this does help me get the user id I use later
     // but just using username probably wouldn't be a bad idea
-    /*$sql = "UPDATE `authcodes`
-        SET `lastused` = '".time()."'
+    /*$sql = "UPDATE authcodes
+        SET lastused = '".time()."'
         WHERE
-            `username` = '".$mysql->real_escape_string($username)."' AND
-            `authhash` = '".$mysql->real_escape_string($auth)."' LIMIT 1";*/
-    $sql = "SELECT * FROM `authcodes`
+            username = '".$mysql->real_escape_string($username)."' AND
+            authhash = '".$mysql->real_escape_string($auth)."' LIMIT 1";*/
+    $sql = "SELECT * FROM authcodes
         WHERE
-            `username` = '".$mysql->real_escape_string($username)."' AND
-            `authhash` = '".$mysql->real_escape_string($auth)."' LIMIT 1";
+            username = '".$mysql->real_escape_string($username)."' AND
+            authhash = '".$mysql->real_escape_string($auth)."' LIMIT 1";
 
 
     if($res = $mysql->query($sql)) {
@@ -331,17 +331,17 @@ function insertLinks($updates, $developer, $user, $devicename) {
 
 
             $sql = "
-                INSERT INTO `links`
+                INSERT INTO links
                 (
-                  `id`,
-                  `linkid`,
-                  `userid`,
-                  `lastvisit`,
-                  `lastcommenttime`,
-                  `lastcommentcount`,
-                  `firstvisit`,
-                  `lastcall`,
-                  `developers`
+                  id,
+                  linkid,
+                  userid,
+                  lastvisit,
+                  lastcommenttime,
+                  lastcommentcount,
+                  firstvisit,
+                  lastcall,
+                  developers
                 ) VALUES (
                   NULL,
                   '".$mysql->real_escape_string($linkid)."',
@@ -357,29 +357,29 @@ function insertLinks($updates, $developer, $user, $devicename) {
             if(!$res) {
 
                 $sql = "
-                UPDATE `links`
+                UPDATE links
                     SET
                 ";
                 if($commentcount != "-1") {
                     $sql .= "
-                    `lastcommentcount`  = IF(`lastcommentcount` > '".$mysql->real_escape_string($commentcount)."', `lastcommentcount`, '".$mysql->real_escape_string($commentcount)."'),
-                    `lastcommenttime`   = '".$mysql->real_escape_string($commenttime)."',
+                    lastcommentcount  = IF(lastcommentcount > '".$mysql->real_escape_string($commentcount)."', lastcommentcount, '".$mysql->real_escape_string($commentcount)."'),
+                    lastcommenttime   = '".$mysql->real_escape_string($commenttime)."',
                     ";
                 }
                 if($linktime != 0) {
                     $sql .= "
-                    `lastvisit` = '".$mysql->real_escape_string($linktime)."',
-                    `firstvisit` = IF (`firstvisit` = 0, '".$mysql->real_escape_string($linktime)."', `firstvisit`),
+                    lastvisit = '".$mysql->real_escape_string($linktime)."',
+                    firstvisit = IF (firstvisit = 0, '".$mysql->real_escape_string($linktime)."', firstvisit),
                     ";
                 }
                 $sql .= "
-                    `lastcall` = '".$mysql->real_escape_string($devicename)."',
-                    `developers` = IFNULL(CONCAT(`developers`, ', ".$mysql->real_escape_string($developer)."'), '".$mysql->real_escape_string($developer)."')
+                    lastcall = '".$mysql->real_escape_string($devicename)."',
+                    developers = IFNULL(CONCAT(developers, ', ".$mysql->real_escape_string($developer)."'), '".$mysql->real_escape_string($developer)."')
 
                     WHERE
-                        `linkid` = '".$mysql->real_escape_string($linkid)."'
+                        linkid = '".$mysql->real_escape_string($linkid)."'
                     AND
-                        `userid` = '".$mysql->real_escape_string($user)."'
+                        userid = '".$mysql->real_escape_string($user)."'
 
                     LIMIT 1
                 ";
@@ -403,17 +403,17 @@ function readLinks($links, $user, $type=null) {
     }
 
     $sql = "
-        SELECT * FROM `links`
+        SELECT * FROM links
         WHERE ( ";
 
     foreach($links as $link) {
-        $sql .= " `linkid` = '".$mysql->real_escape_string($link)."' OR ";
+        $sql .= " linkid = '".$mysql->real_escape_string($link)."' OR ";
     }
 
     // 1=0 to get rid of extra OR
     $sql .= "
         1=0) AND
-        `userid` = '".$mysql->real_escape_string($user)."'
+        userid = '".$mysql->real_escape_string($user)."'
     ";
 
     //echo $sql;
@@ -488,18 +488,18 @@ function historyLinks($user, $type=null, $links=0, $time=0) {
 
 
     $sql = "
-        SELECT * FROM `links`
+        SELECT * FROM links
          WHERE ";
 
     if($time > 0) {
         $time = (int) $time;
-        $sql .= " (`lastvisit` >= '$time' OR `lastcommenttime` >= '$time') AND ";
+        $sql .= " (lastvisit >= '$time' OR lastcommenttime >= '$time') AND ";
     }
 
     $links = (int) $links;
 
     $sql .= "
-        `userid` = '".$mysql->real_escape_string($user)."'
+        userid = '".$mysql->real_escape_string($user)."'
 
         LIMIT $links, 100
     ";
@@ -590,15 +590,15 @@ function createAccount($username, $password, $email, $developer) {
         $salt = $pieces[2];
         $hash = $pieces[3];
 
-        $sql = "INSERT INTO `user` (
-            `id`,
-            `username`,
-            `passhash`,
-            `salt`,
-            `email`,
-            `created`,
-            `lastip`,
-            `createdby`
+        $sql = "INSERT INTO user (
+            id,
+            username,
+            passhash,
+            salt,
+            email,
+            created,
+            lastip,
+            createdby
         ) VALUES (
             NULL,
             '".$mysql->real_escape_string($username)."',
@@ -616,7 +616,7 @@ function createAccount($username, $password, $email, $developer) {
             $error = "";
 
         } else {
-            $r = $mysql->query("SELECT * FROM `user` WHERE `username` = '".mysql_real_escape_string($username)."' LIMIT 1");
+            $r = $mysql->query("SELECT * FROM user WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
             if($r->num_rows > 0) {
                 $error = "username already exists";
             } else {
@@ -632,7 +632,7 @@ function createAccount($username, $password, $email, $developer) {
 function checkLogin($username, $password) {
 
 
-    $userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
+    $userinfo = $mysql->query("SELECT * FROM user WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {
@@ -666,7 +666,7 @@ function addAuth($username, $password, $device, $developer) {
 
     $key = genrand();
 
-    $userinfo = $mysql->query("SELECT * FROM `user` WHERE `username` = '".$mysql->real_escape_string($username)."' LIMIT 1");
+    $userinfo = $mysql->query("SELECT * FROM user WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {
@@ -681,14 +681,14 @@ function addAuth($username, $password, $device, $developer) {
         $result = validate_password($password, $hashset);
 
         if($result) {
-            $sql = "INSERT INTO `authcodes` (
-                `id`,
-                `userid`,
-                `username`,
-                `authhash`,
-                `description`,
-                `created`,
-                `createdby`
+            $sql = "INSERT INTO authcodes (
+                id,
+                userid,
+                username,
+                authhash,
+                description,
+                created,
+                createdby
             ) VALUES (
                 NULL,
                 '".$mysql->real_escape_string($user["id"])."',

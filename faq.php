@@ -7,7 +7,7 @@ include("userclass.php");
 
 $loggedin = $session->isLoggedIn();
 
-$faq = pg_query("SELECT * FROM `faq`");
+$faq = pg_query("SELECT * FROM faq");
 
 $questions = array();
 

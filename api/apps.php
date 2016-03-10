@@ -55,9 +55,9 @@ if(!isset($sql)) {
 
 function getSQL($platform=null) {
     if($platform != null) {
-        return "SELECT * FROM `apps` WHERE `platform` = '".$mysql->real_escape_string($platform)."'";
+        return "SELECT * FROM apps WHERE platform = '".$mysql->real_escape_string($platform)."'";
     } else {
-        return "SELECT * FROM `apps`";
+        return "SELECT * FROM apps";
     }
 
 

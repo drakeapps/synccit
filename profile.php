@@ -43,21 +43,21 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
             $hash = $pieces[3];
 
             $addsql = " ,
-                `passhash` = '".pg_escape_string($hash)."',
-                `salt` = '".pg_escape_string($salt)."'
+                passhash = '".pg_escape_string($hash)."',
+                salt = '".pg_escape_string($salt)."'
                 ";
         }
 
         $sql = "
             UPDATE
-                `user`
+                user
                 SET
-                  `email` = '".pg_escape_string($email)."'
+                  email = '".pg_escape_string($email)."'
 
                   $addsql
 
                 WHERE
-                    `id` = '".$user->id."'
+                    id = '".$user->id."'
 
                 LIMIT 1
                   ";
@@ -74,11 +74,11 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
 
 
 }
-$links = pg_query("SELECT count(*) as `count` FROM `links` WHERE `userid` = '".pg_escape_string($user->id)."'");
+$links = pg_query("SELECT count(*) as count FROM links WHERE userid = '".pg_escape_string($user->id)."'");
 $links = pg_fetch_array($links, null, PGSQL_ASSOC);
 $links = $links['count'];
 
-$devices = pg_query("SELECT count(*) as `count` FROM `authcodes` where `userid` = '".pg_escape_string($user->id)."'");
+$devices = pg_query("SELECT count(*) as count FROM authcodes where userid = '".pg_escape_string($user->id)."'");
 $devices = pg_fetch_array($devices, null, PGSQL_ASSOC);
 $devices = $devices['count'];
 

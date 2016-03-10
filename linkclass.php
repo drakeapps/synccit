@@ -15,7 +15,7 @@ class Link {
 
     public function loadLink($i) {
 
-        $sql = "SELECT * FROM `links` WHERE `linkid` = '".pg_escape_string($i)."' LIMIT 1";
+        $sql = "SELECT * FROM links WHERE linkid = '".pg_escape_string($i)."' LIMIT 1";
 
         if(!($res = pg_query($sql))) {
             return false;

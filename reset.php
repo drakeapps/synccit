@@ -18,7 +18,7 @@ if($_POST['reset'] == "reset") {
     // check if it's a valid-ish email. it's not nothing. and it at least contains an @
     } else if(isset($_POST['email']) && $_POST['email'] != "" && count(explode("@", $_POST['email'])) == 2) {
 
-        $sql = "SELECT * FROM `user` WHERE `email` = '".pg_escape_string($_POST['email'])."' LIMIT 1";
+        $sql = "SELECT * FROM user WHERE email = '".pg_escape_string($_POST['email'])."' LIMIT 1";
 
         $user = pg_query($sql);
 
@@ -34,12 +34,12 @@ if($_POST['reset'] == "reset") {
                 $reset_hash = sha1($user_id.genrand().sha1($user['salt']).genrand().time().$user['username'].genrand());
 
                 $sql = "
-                    UPDATE `user`
+                    UPDATE user
                         SET
-                          `resethash` = '".pg_escape_string($reset_hash)."',
-                          `canreset` = '1'
+                          resethash = '".pg_escape_string($reset_hash)."',
+                          canreset = '1'
                         WHERE
-                            `id` = '".pg_escape_string($user_id)."'
+                            id = '".pg_escape_string($user_id)."'
                         LIMIT 1
                  ";
 
@@ -78,13 +78,13 @@ if($_POST['reset'] == "reset") {
 if(isset($_GET['u']) && ((int) $_GET['u'] > 0) && isset($_GET['t'])) {
 
     $u = (int) $_GET['u'];
-    $sql = "SELECT * FROM `user`
+    $sql = "SELECT * FROM user
             WHERE
-                `id` = '".pg_escape_string($u)."'
+                id = '".pg_escape_string($u)."'
                     AND
-                `resethash` = '".pg_escape_string($_GET['t'])."'
+                resethash = '".pg_escape_string($_GET['t'])."'
                     AND
-                `canreset` = '1'
+                canreset = '1'
             LIMIT 1";
 
     $user = pg_query($sql);
@@ -105,13 +105,13 @@ if(isset($_GET['u']) && ((int) $_GET['u'] > 0) && isset($_GET['t'])) {
         $hash = $pieces[3];
 
         $sql = "
-                UPDATE `user`
+                UPDATE user
                     SET
-                      `passhash` = '".pg_escape_string($hash)."',
-                      `salt` = '".pg_escape_string($salt)."',
-                      `canreset` = '0'
+                      passhash = '".pg_escape_string($hash)."',
+                      salt = '".pg_escape_string($salt)."',
+                      canreset = '0'
                     WHERE
-                        `id` = '".pg_escape_string($user_id)."'
+                        id = '".pg_escape_string($user_id)."'
                     LIMIT 1
             ";
 

@@ -31,13 +31,13 @@ if(isset($_REQUEST['do']) && isset($_REQUEST['code']) && $_REQUEST['do'] == "rem
 
     if(strcmp($hash, $_GET['hash']) == 0) {
 
-        $sql = "DELETE FROM `authcodes`
+        $sql = "DELETE FROM authcodes
             WHERE
-                `userid`    = '".pg_escape_string($user->id)."'
+                userid    = '".pg_escape_string($user->id)."'
                     AND
-                `username`  = '".pg_escape_string($user->username)."'
+                username  = '".pg_escape_string($user->username)."'
                     AND
-                `authhash`  = '".pg_escape_string($code)."'
+                authhash  = '".pg_escape_string($code)."'
             LIMIT 1
         ;";
 
@@ -58,13 +58,13 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
     if(isset($_POST['device']) ) {
         $key = genrand();
 
-        $sql = "INSERT INTO `authcodes` (
-            `id`,
-            `userid`,
-            `username`,
-            `authhash`,
-            `description`,
-            `created`
+        $sql = "INSERT INTO authcodes (
+            id,
+            userid,
+            username,
+            authhash,
+            description,
+            created
         ) VALUES (
             NULL,
             '".pg_escape_string($user->id)."',
@@ -86,7 +86,7 @@ if(isset($_POST['submit']) and strcmp($hash, $_POST['hash']) == 0) {
 
 }
 
-$sql = "SELECT * FROM `authcodes` WHERE `userid` = '".pg_escape_string($user->id)."' ORDER BY `created` DESC";
+$sql = "SELECT * FROM authcodes WHERE userid = '".pg_escape_string($user->id)."' ORDER BY created DESC";
 $res = pg_query($sql);
 // this could be a separate class, but I'm pretty sure this is the only time it'll be used
 $codes = array();

@@ -47,14 +47,14 @@ if(isset($_POST['create'])) {
         $salt = $pieces[2];
         $hash = $pieces[3];
 
-        $sql = "INSERT INTO `user` (
-            `id`,
-            `username`,
-            `passhash`,
-            `salt`,
-            `email`,
-            `created`,
-            `lastip`
+        $sql = "INSERT INTO user (
+            id,
+            username,
+            passhash,
+            salt,
+            email,
+            created,
+            lastip
         ) VALUES (
             NULL,
             '".pg_escape_string($username)."',
@@ -70,7 +70,7 @@ if(isset($_POST['create'])) {
             header("Location: login.php");
             exit;
         } else {
-            $r = pg_query("SELECT * FROM `user` WHERE `username` = '".pg_escape_string($username)."' LIMIT 1");
+            $r = pg_query("SELECT * FROM user WHERE username = '".pg_escape_string($username)."' LIMIT 1");
             if(pg_num_rows($r) > 0) {
                 $error = "username already exists";
             } else {

@@ -61,7 +61,7 @@ class Session {
     public function isLoggedIn() {
 
         $this->restorePHPSession();
-        $sql = "SELECT * FROM `logincodes` WHERE `id` = '".pg_escape_string($this->id)."' LIMIT 1";
+        $sql = "SELECT * FROM logincodes WHERE id = '".pg_escape_string($this->id)."' LIMIT 1";
 
 
         $result = pg_query($sql);

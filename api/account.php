@@ -201,11 +201,11 @@ function checkAuth($username, $auth, $mode=false) {
     // seems running this and seeing if affected_rows was > 0 doesn't work.
     // this does help me get the user id I use later
     // but just using username probably wouldn't be a bad idea
-    /*$sql = "UPDATE `authcodes`
-        SET `lastused` = '".time()."'
+    /*$sql = "UPDATE authcodes
+        SET lastused = '".time()."'
         WHERE
-            `username` = '".pg_escape_string($username)."' AND
-            `authhash` = '".pg_escape_string($auth)."' LIMIT 1";*/
+            username = '".pg_escape_string($username)."' AND
+            authhash = '".pg_escape_string($auth)."' LIMIT 1";*/
 
 
     // ok. seems that i only used userid in login codes
@@ -216,13 +216,13 @@ function checkAuth($username, $auth, $mode=false) {
     // i guess ill start with a join
     // we'll see if that's too slow/bad
 
-    $sql = "SELECT `user`.`id` as userid FROM `logincodes`, `user`
+    $sql = "SELECT user.id as userid FROM logincodes, user
         WHERE
-            `user`.`username` = '".pg_escape_string($username)."'
+            user.username = '".pg_escape_string($username)."'
                 AND
-            `logincodes`.`authhash` = '".pg_escape_string($auth)."'
+            logincodes.authhash = '".pg_escape_string($auth)."'
                 AND
-            `user`.`id` = `logincodes`.`userid`
+            user.id = logincodes.userid
 
         LIMIT 1";
 
@@ -268,17 +268,17 @@ function insertLinks($updates, $developer, $user, $devicename) {
 
 
             $sql = "
-                INSERT INTO `links`
+                INSERT INTO links
                 (
-                  `id`,
-                  `linkid`,
-                  `userid`,
-                  `lastvisit`,
-                  `lastcommenttime`,
-                  `lastcommentcount`,
-                  `firstvisit`,
-                  `lastcall`,
-                  `developers`
+                  id,
+                  linkid,
+                  userid,
+                  lastvisit,
+                  lastcommenttime,
+                  lastcommentcount,
+                  firstvisit,
+                  lastcall,
+                  developers
                 ) VALUES (
                   NULL,
                   '".pg_escape_string($linkid)."',
@@ -294,29 +294,29 @@ function insertLinks($updates, $developer, $user, $devicename) {
             if(!$res) {
 
                 $sql = "
-                UPDATE `links`
+                UPDATE links
                     SET
                 ";
                 if($commentcount != "-1") {
                     $sql .= "
-                    `lastcommentcount`  = IF(`lastcommentcount` > '".pg_escape_string($commentcount)."', `lastcommentcount`, '".pg_escape_string($commentcount)."'),
-                    `lastcommenttime`   = '".pg_escape_string($commenttime)."',
+                    lastcommentcount  = IF(lastcommentcount > '".pg_escape_string($commentcount)."', lastcommentcount, '".pg_escape_string($commentcount)."'),
+                    lastcommenttime   = '".pg_escape_string($commenttime)."',
                     ";
                 }
                 if($linktime != 0) {
                     $sql .= "
-                    `lastvisit` = '".pg_escape_string($linktime)."',
-                    `firstvisit` = IF (`firstvisit` = 0, '".pg_escape_string($linktime)."', `firstvisit`),
+                    lastvisit = '".pg_escape_string($linktime)."',
+                    firstvisit = IF (firstvisit = 0, '".pg_escape_string($linktime)."', firstvisit),
                     ";
                 }
                 $sql .= "
-                    `lastcall` = '".pg_escape_string($devicename)."',
-                    `developers` = IFNULL(CONCAT(`developers`, ', ".pg_escape_string($developer)."'), '".pg_escape_string($developer)."')
+                    lastcall = '".pg_escape_string($devicename)."',
+                    developers = IFNULL(CONCAT(developers, ', ".pg_escape_string($developer)."'), '".pg_escape_string($developer)."')
 
                     WHERE
-                        `linkid` = '".pg_escape_string($linkid)."'
+                        linkid = '".pg_escape_string($linkid)."'
                     AND
-                        `userid` = '".pg_escape_string($user)."'
+                        userid = '".pg_escape_string($user)."'
 
                     LIMIT 1
                 ";
@@ -334,13 +334,13 @@ function deleteAuth($updates, $userid, $username) {
 
     foreach($updates as $update) {
 
-        $sql = "DELETE FROM `authcodes`
+        $sql = "DELETE FROM authcodes
             WHERE
-                `userid` = '".pg_escape_string($userid)."'
+                userid = '".pg_escape_string($userid)."'
                   AND
-                `username` = '".pg_escape_string($username)."'
+                username = '".pg_escape_string($username)."'
                   AND
-                `authhash` = '".pg_escape_string($update)."'
+                authhash = '".pg_escape_string($update)."'
 
             LIMIT 1";
 
@@ -365,23 +365,23 @@ function readHistory($user, $type=null) {
     $sql = "
         SELECT *
         FROM (
-                SELECT `authhash` as `info`, `created` as `time`
-                  FROM `authcodes`
+                SELECT authhash as info, created as time
+                  FROM authcodes
                 WHERE
-                  `userid` = '3'
+                  userid = '3'
             UNION
-              SELECT `linkid` as `info`, `lastvisit` as `time` FROM `links`
+              SELECT linkid as info, lastvisit as time FROM links
               WHERE
-                 `links`.`userid` = '3'
+                 links.userid = '3'
             UNION
-              SELECT `authhash` as `info`, `created` as `time` FROM `logincodes`
+              SELECT authhash as info, created as time FROM logincodes
               WHERE
-                `userid` = '3'
+                userid = '3'
         ) results
-        ORDER BY `time` DESC
+        ORDER BY time DESC
     ";
 
-    $sql = "SELECT * FROM `links` WHERE `userid` = '".pg_escape_string($user)."' ORDER BY `lastvisit` DESC LIMIT 20";
+    $sql = "SELECT * FROM links WHERE userid = '".pg_escape_string($user)."' ORDER BY lastvisit DESC LIMIT 20";
 
 
 
@@ -447,7 +447,7 @@ function getDevices($user, $type=null) {
 
     // this is what i would want to do, but doesn't work
 
-    $sql = "SELECT * FROM `authcodes` WHERE `userid` = '".pg_escape_string($user)."' ORDER BY `created` DESC";
+    $sql = "SELECT * FROM authcodes WHERE userid = '".pg_escape_string($user)."' ORDER BY created DESC";
 
 
 
@@ -538,15 +538,15 @@ function createAccount($username, $password, $email, $developer) {
         $salt = $pieces[2];
         $hash = $pieces[3];
 
-        $sql = "INSERT INTO `user` (
-            `id`,
-            `username`,
-            `passhash`,
-            `salt`,
-            `email`,
-            `created`,
-            `lastip`,
-            `createdby`
+        $sql = "INSERT INTO user (
+            id,
+            username,
+            passhash,
+            salt,
+            email,
+            created,
+            lastip,
+            createdby
         ) VALUES (
             NULL,
             '".pg_escape_string($username)."',
@@ -564,7 +564,7 @@ function createAccount($username, $password, $email, $developer) {
             $error = "";
 
         } else {
-            $r = pg_query("SELECT * FROM `user` WHERE `username` = '".mysql_real_escape_string($username)."' LIMIT 1");
+            $r = pg_query("SELECT * FROM user WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
             if($r->num_rows > 0) {
                 $error = "username already exists";
             } else {
@@ -580,7 +580,7 @@ function createAccount($username, $password, $email, $developer) {
 function checkLogin($username, $password) {
 
 
-    $userinfo = pg_query("SELECT * FROM `user` WHERE `username` = '".pg_escape_string($username)."' LIMIT 1");
+    $userinfo = pg_query("SELECT * FROM user WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {
@@ -616,14 +616,14 @@ function addAuth($username, $userid, $device, $developer) {
 
 
 
-    $sql = "INSERT INTO `authcodes` (
-        `id`,
-        `userid`,
-        `username`,
-        `authhash`,
-        `description`,
-        `created`,
-        `createdby`
+    $sql = "INSERT INTO authcodes (
+        id,
+        userid,
+        username,
+        authhash,
+        description,
+        created,
+        createdby
     ) VALUES (
         NULL,
         '".pg_escape_string($userid)."',
@@ -653,7 +653,7 @@ function addLogin($username, $password, $developer) {
 
     //$key = genrand();
 
-    $userinfo = pg_query("SELECT * FROM `user` WHERE `username` = '".pg_escape_string($username)."' LIMIT 1");
+    $userinfo = pg_query("SELECT * FROM user WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {
@@ -672,12 +672,12 @@ function addLogin($username, $password, $developer) {
         $loginhash = $session->hash;
 
         if($result) {
-            $sql = "INSERT INTO `logincodes` (
-                `id`,
-                `userid`,
-                `authhash`,
-                `lastlogin`,
-                `created`
+            $sql = "INSERT INTO logincodes (
+                id,
+                userid,
+                authhash,
+                lastlogin,
+                created
             ) VALUES (
                 NULL,
                 '".pg_escape_string($user["id"])."',
