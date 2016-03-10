@@ -18,7 +18,7 @@ if($_POST['reset'] == "reset") {
     // check if it's a valid-ish email. it's not nothing. and it at least contains an @
     } else if(isset($_POST['email']) && $_POST['email'] != "" && count(explode("@", $_POST['email'])) == 2) {
 
-        $sql = "SELECT * FROM user WHERE email = '".pg_escape_string($_POST['email'])."' LIMIT 1";
+        $sql = "SELECT * FROM users WHERE email = '".pg_escape_string($_POST['email'])."' LIMIT 1";
 
         $user = pg_query($sql);
 
@@ -78,7 +78,7 @@ if($_POST['reset'] == "reset") {
 if(isset($_GET['u']) && ((int) $_GET['u'] > 0) && isset($_GET['t'])) {
 
     $u = (int) $_GET['u'];
-    $sql = "SELECT * FROM user
+    $sql = "SELECT * FROM users
             WHERE
                 id = '".pg_escape_string($u)."'
                     AND

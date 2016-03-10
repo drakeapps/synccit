@@ -21,7 +21,7 @@ if(isset($_POST['login'])) {
 	// check username validity
 	$password = $_POST['password'];
 
-	$userinfo = pg_query("SELECT * FROM user WHERE username = '".pg_escape_string($username)."' LIMIT 1");
+	$userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
     if($userinfo->num_rows > 0) {
 

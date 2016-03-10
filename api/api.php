@@ -616,7 +616,7 @@ function createAccount($username, $password, $email, $developer) {
             $error = "";
 
         } else {
-            $r = $mysql->query("SELECT * FROM user WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
+            $r = $mysql->query("SELECT * FROM users WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
             if($r->num_rows > 0) {
                 $error = "username already exists";
             } else {
@@ -632,7 +632,7 @@ function createAccount($username, $password, $email, $developer) {
 function checkLogin($username, $password) {
 
 
-    $userinfo = $mysql->query("SELECT * FROM user WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
+    $userinfo = $mysql->query("SELECT * FROM users WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {
@@ -666,7 +666,7 @@ function addAuth($username, $password, $device, $developer) {
 
     $key = genrand();
 
-    $userinfo = $mysql->query("SELECT * FROM user WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
+    $userinfo = $mysql->query("SELECT * FROM users WHERE username = '".$mysql->real_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {

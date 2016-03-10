@@ -538,7 +538,7 @@ function createAccount($username, $password, $email, $developer) {
         $salt = $pieces[2];
         $hash = $pieces[3];
 
-        $sql = "INSERT INTO user (
+        $sql = "INSERT INTO users (
             id,
             username,
             passhash,
@@ -564,7 +564,7 @@ function createAccount($username, $password, $email, $developer) {
             $error = "";
 
         } else {
-            $r = pg_query("SELECT * FROM user WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
+            $r = pg_query("SELECT * FROM users WHERE username = '".mysql_real_escape_string($username)."' LIMIT 1");
             if($r->num_rows > 0) {
                 $error = "username already exists";
             } else {
@@ -580,7 +580,7 @@ function createAccount($username, $password, $email, $developer) {
 function checkLogin($username, $password) {
 
 
-    $userinfo = pg_query("SELECT * FROM user WHERE username = '".pg_escape_string($username)."' LIMIT 1");
+    $userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {
@@ -653,7 +653,7 @@ function addLogin($username, $password, $developer) {
 
     //$key = genrand();
 
-    $userinfo = pg_query("SELECT * FROM user WHERE username = '".pg_escape_string($username)."' LIMIT 1");
+    $userinfo = pg_query("SELECT * FROM users WHERE username = '".pg_escape_string($username)."' LIMIT 1");
 
 
     if($userinfo->num_rows > 0) {

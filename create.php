@@ -47,7 +47,7 @@ if(isset($_POST['create'])) {
         $salt = $pieces[2];
         $hash = $pieces[3];
 
-        $sql = "INSERT INTO user (
+        $sql = "INSERT INTO users (
             id,
             username,
             passhash,
