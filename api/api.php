@@ -588,7 +588,7 @@ function createAccount($username, $password, $email, $developer) {
         $salt = $pieces[2];
         $hash = $pieces[3];
 
-        $sql = "INSERT INTO user (
+        $sql = "INSERT INTO users (
             username,
             passhash,
             salt,
