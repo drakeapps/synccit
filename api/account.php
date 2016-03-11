@@ -230,7 +230,7 @@ function checkAuth($username, $auth, $mode=false) {
 
     if($res = pg_query($sql)) {
         //var_dump($result);
-        if($res->num_rows > 0) {
+        if(pg_num_rows($res) > 0) {
             $info = pg_fetch_array($res, null, PGSQL_ASSOC);
             return array(
                 'username'  => $username,
@@ -388,7 +388,7 @@ function readHistory($user, $type=null) {
 
     $result = pg_query($sql);
 
-    if($result->num_rows < 1) {
+    if(pg_num_rows($result) < 1) {
         // this probably actually shouldn't be an error
         if($type == "json") {
             return "[]";
@@ -454,7 +454,7 @@ function getDevices($user, $type=null) {
 
     $result = pg_query($sql);
 
-    if($result->num_rows < 1) {
+    if(pg_num_rows($result) < 1) {
         // this probably actually shouldn't be an error
         if($type == "json") {
             return "[]";

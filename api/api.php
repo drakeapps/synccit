@@ -286,7 +286,7 @@ function checkAuth($username, $auth, $mode=false) {
     if($res = pg_query($sql)) {
         //var_dump($result);
         if(pg_num_rows($res) > 0) {
-            $info = pg_fetch_array($res);
+            $info = pg_fetch_array($res, null, PGSQL_ASSOC);
             return array(
                 'username'  => $info['username'],
                 'userid'    => $info['userid'],

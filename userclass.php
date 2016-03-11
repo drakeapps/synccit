@@ -28,7 +28,7 @@ class User {
         $sql = "SELECT * FROM users WHERE id = '".pg_escape_string($u)."' LIMIT 1";
 
         $res = pg_query($sql);
-        if($res->num_rows < 1) {
+        if(pg_num_rows($res) < 1) {
             return false;
         }
         $user = pg_fetch_array($res, null, PGSQL_ASSOC);

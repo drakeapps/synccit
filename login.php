@@ -67,7 +67,7 @@ if(isset($_POST['login'])) {
                 $session->setPHPSession();
 
                 //redirect to homepage
-                header("Location: index.php");
+                //header("Location: index.php");
             } else {
                 $error = "database error. try again";
             }
