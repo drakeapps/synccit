@@ -42,7 +42,7 @@ if(isset($_REQUEST['do']) && isset($_REQUEST['code']) && $_REQUEST['do'] == "rem
         ;";
 
 
-        if($res = $pg_query($sql)) {
+        if($res = pg_query($sql)) {
             $error = "device key removed";
         } else {
             //$error = "unable to remove key";
