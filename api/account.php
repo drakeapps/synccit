@@ -339,8 +339,7 @@ function deleteAuth($updates, $userid, $username) {
                 username = '".pg_escape_string($username)."'
                   AND
                 authhash = '".pg_escape_string($update)."'
-
-            LIMIT 1";
+		";
 
 
         pg_query($sql);

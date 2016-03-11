@@ -38,14 +38,12 @@ if(isset($_REQUEST['do']) && isset($_REQUEST['code']) && $_REQUEST['do'] == "rem
                 username  = '".pg_escape_string($user->username)."'
                     AND
                 authhash  = '".pg_escape_string($code)."'
-            LIMIT 1
         ;";
-
 
         if($res = pg_query($sql)) {
             $error = "device key removed";
         } else {
-            //$error = "unable to remove key";
+            $error = "unable to remove key";
         }
     }
 
