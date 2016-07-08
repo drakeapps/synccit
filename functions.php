@@ -125,7 +125,7 @@ function htmlHeader($title, $loggedin=false) {
             <p><a href="<?php echo FAQURL; ?>">FAQ</a></p>
         </div>
         <div class="twocol menubaritem">
-            <p><a href="http://blog.synccit.com/">Blog</a></p>
+            <p><a href="https://twitter.com/synccit">Twitter</a></p>
         </div>
         <div class="twocol menubaritem last">
             <p><a href="<?php echo str_replace("@s", $key, LOGOUTURL); ?>">Logout</a></p>
@@ -140,7 +140,7 @@ function htmlHeader($title, $loggedin=false) {
                 <p><a href="<?php echo FAQURL; ?>">FAQ</a></p>
             </div>
             <div class="twocol menubaritem">
-                <p><a href="http://blog.synccit.com/">Blog</a></p>
+                <p><a href="https://twitter.com/synccit">Twitter</a></p>
             </div>
             <div class="twocol menubaritem">
                 <p></p>
