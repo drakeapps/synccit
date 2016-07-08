@@ -43,7 +43,7 @@ class Session {
     }
 
     public function restorePHPSession() {
-        if(isset($_SESSION['id']) && isset($_SESSION['hash'])) {
+        if(!empty($_SESSION['id']) && !empty($_SESSION['hash'])) {
             $this->id = $_SESSION['id'];
             $this->hash = $_SESSION['hash'];
             return true;

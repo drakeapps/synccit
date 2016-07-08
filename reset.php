@@ -34,13 +34,13 @@ if($_POST['reset'] == "reset") {
                 $reset_hash = sha1($user_id.genrand().sha1($user['salt']).genrand().time().$user['username'].genrand());
 
                 $sql = "
-                    UPDATE user
+                    UPDATE users
                         SET
                           resethash = '".pg_escape_string($reset_hash)."',
                           canreset = '1'
                         WHERE
                             id = '".pg_escape_string($user_id)."'
-                        LIMIT 1
+                        
                  ";
 
                 pg_query($sql);
@@ -105,14 +105,14 @@ if(isset($_GET['u']) && ((int) $_GET['u'] > 0) && isset($_GET['t'])) {
         $hash = $pieces[3];
 
         $sql = "
-                UPDATE user
+                UPDATE users
                     SET
                       passhash = '".pg_escape_string($hash)."',
                       salt = '".pg_escape_string($salt)."',
                       canreset = '0'
                     WHERE
                         id = '".pg_escape_string($user_id)."'
-                    LIMIT 1
+                    
             ";
 
         $reset = pg_query($sql);

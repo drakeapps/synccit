@@ -216,13 +216,13 @@ function checkAuth($username, $auth, $mode=false) {
     // i guess ill start with a join
     // we'll see if that's too slow/bad
 
-    $sql = "SELECT user.id as userid FROM logincodes, user
+    $sql = "SELECT users.id as userid FROM logincodes, users
         WHERE
-            user.username = '".pg_escape_string($username)."'
+            users.username = '".pg_escape_string($username)."'
                 AND
             logincodes.authhash = '".pg_escape_string($auth)."'
                 AND
-            user.id = logincodes.userid
+            users.id = logincodes.userid
 
         LIMIT 1";
 

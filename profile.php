@@ -50,7 +50,7 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
 
         $sql = "
             UPDATE
-                user
+                users
                 SET
                   email = '".pg_escape_string($email)."'
 
@@ -59,7 +59,6 @@ if(isset($_POST['do']) && $_POST['do'] == "edit" && $_POST['hash'] == $hash) {
                 WHERE
                     id = '".$user->id."'
 
-                LIMIT 1
                   ";
 
         if(pg_query($sql)) {
