@@ -319,7 +319,7 @@ function insertLinks($updates, $developer, $user, $devicename) {
     // just realized foreach can do keys. should change it
     while($current = current($updates)) {
         $linkid = key($updates);
-        if(strlen($linkid) == 6) { // seems a blank link can get added and causes some trouble
+        if(strlen($linkid) >= 6) { // seems a blank link can get added and causes some trouble
 
             //$commentcount = $current['comment'] != NULL ? $current['commment'] : "-1";
             if($current['comment'] != NULL) {
